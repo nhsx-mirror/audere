@@ -31,12 +31,14 @@ import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
 
+import java.lang.Thread;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import host.exp.exponent.customview.AutoFitTextureView;
+import host.exp.exponent.DetectorView;
 
 public class CameraApi2Controller extends CameraController {
 
@@ -107,6 +109,8 @@ public class CameraApi2Controller extends CameraController {
     private final int MAX_FOCUS_RESETS = 5;
 
     private boolean cameraOpened = false;
+
+    private boolean captureStillInProgress = false;
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
@@ -114,6 +118,7 @@ public class CameraApi2Controller extends CameraController {
             = new CameraCaptureSession.CaptureCallback() {
 
         private void process(CaptureResult result) {
+            Log.d(TAG, "S7 capture call back state = " + state);
             switch (state) {
                 case STATE_PREVIEW: {
                     // We have nothing to do when the camera preview is working normally.
@@ -124,18 +129,27 @@ public class CameraApi2Controller extends CameraController {
                     break;
                 }
                 case STATE_WAITING_LOCK: {
+                    Log.d(TAG, "S7 STATE_WAITING_LOCK");
                     Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
+                    Log.d(TAG, "S7 afState=" + afState);
+                    Log.d(TAG, "S7 focusResets=" + focusResets);
+
                     if (afState == null) {
+                        Log.d(TAG, "S7 null afState, capturing still picture");
                         captureStillPicture();
+                        Log.d(TAG, "S7 captured still picture");
                     } else if (CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState &&
                             focusResets < MAX_FOCUS_RESETS) {
                         focusResets++;
+                        Log.d(TAG, "S7 not focus locked, reset focus");
                         resetFocus();
+                        Log.d(TAG, "S7 not focus locked, done reset focus");
                     } else if ((CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState ||
                             CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState)) {
                         focusResets = 0;
                         // CONTROL_AE_STATE can be null on some devices
                         Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                        Log.d(TAG, "S7 aeState = " + aeState);
                         if (aeState == null ||
                                 aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
                             state = STATE_PICTURE_TAKEN;
@@ -149,6 +163,7 @@ public class CameraApi2Controller extends CameraController {
                 case STATE_WAITING_PRECAPTURE: {
                     // CONTROL_AE_STATE can be null on some devices
                     Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                    Log.d(TAG, "S7 aeState = " + aeState);
                     if (aeState == null ||
                             aeState == CaptureResult.CONTROL_AE_STATE_PRECAPTURE ||
                             aeState == CaptureRequest.CONTROL_AE_STATE_FLASH_REQUIRED) {
@@ -159,12 +174,19 @@ public class CameraApi2Controller extends CameraController {
                 case STATE_WAITING_NON_PRECAPTURE: {
                     // CONTROL_AE_STATE can be null on some devices
                     Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                    Log.d(TAG, "S7 aeState = " + aeState);
                     if (aeState == null || aeState != CaptureResult.CONTROL_AE_STATE_PRECAPTURE) {
                         state = STATE_PICTURE_TAKEN;
                         captureStillPicture();
                     }
                     break;
                 }
+            }
+            if (captureStillInProgress) {
+                Log.d(TAG, "S7 number of threads = " + Thread.getAllStackTraces().keySet().size());
+                Log.d(TAG, "S7 number of active threads = " + Thread.activeCount());
+                Log.d(TAG, "S7 uploading log file");
+                DetectorView.uploadLog(TAG, (MainActivity) activity);
             }
         }
 
@@ -444,7 +466,9 @@ public class CameraApi2Controller extends CameraController {
     }
 
     public void captureStill() {
+        captureStillInProgress = true;
         if (cameraDevice == null) {
+            Log.d(TAG, "S7 null camera device");
             return;
         }
         resetFocus();
@@ -452,21 +476,27 @@ public class CameraApi2Controller extends CameraController {
 
     private void resetFocus() {
         if (captureSession == null) {
+            Log.d(TAG, "S7 null capture session");
             return;
         }
         Log.d(TAG, "reset focus");
         try {
             // Stop existing repeating request
             captureSession.stopRepeating();
+            Log.d(TAG, "S7 stopped repeating");
 
             // Turn off continuous capture mode
             previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
             state = STATE_WAITING_AF_RESET;
             previewRequestBuilder.setTag("RESET_FOCUS");
+            Log.d(TAG, "S7 capturing image");
             captureSession.capture(previewRequestBuilder.build(), captureCallback, backgroundHandler);
+            Log.d(TAG, "S7 captured image");
         } catch (CameraAccessException e) {
+            Log.d(TAG, "S7 refocus CameraAccessException");
             e.printStackTrace();
         } catch (IllegalStateException e) {
+            Log.d(TAG, "S7 refocus IllegalStateException");
             e.printStackTrace();
         }
     }
@@ -494,19 +524,24 @@ public class CameraApi2Controller extends CameraController {
                         MeteringRectangle.METERING_WEIGHT_MAX - 1);
                 previewRequestBuilder.set(CaptureRequest.CONTROL_AF_REGIONS, new MeteringRectangle[]{focusAreaTouch});
             }
+            Log.d(TAG, "S7 locking focus and capturing");
 
             // Tell #captureCallback to wait for the lock.
             state = STATE_WAITING_LOCK;
             previewRequestBuilder.setTag("LOCK_FOCUS");
             captureSession.capture(previewRequestBuilder.build(), captureCallback, backgroundHandler);
+            Log.d(TAG, "S7 locked focus and captured");
 
             previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_IDLE);
 
             previewRequestBuilder.setTag("IDLE");
             captureSession.setRepeatingRequest(previewRequestBuilder.build(), captureCallback, backgroundHandler);
+            Log.d(TAG, "S7 set repeating request");
         } catch (CameraAccessException e) {
+            Log.d(TAG, "S7 lock focus CameraAccessException");
             e.printStackTrace();
         } catch (IllegalStateException e) {
+            Log.d(TAG, "S7 lock focus IllegalStateException");
             e.printStackTrace();
         }
     }
@@ -517,6 +552,7 @@ public class CameraApi2Controller extends CameraController {
      */
     private void runPrecaptureSequence() {
         if (captureSession == null) {
+            Log.d(TAG, "S7 runPrecaptureSequence null captureSession");
             return;
         }
         Log.d(TAG, "Run precapture sequence");
@@ -527,11 +563,15 @@ public class CameraApi2Controller extends CameraController {
             // Tell #mCaptureCallback to wait for the precapture sequence to be set.
             state = STATE_WAITING_PRECAPTURE;
             previewRequestBuilder.setTag("PRE_CAPTURE");
+            Log.d(TAG, "S7 runPrecaptureSequence capturing");
             captureSession.capture(previewRequestBuilder.build(), captureCallback,
                     backgroundHandler);
+            Log.d(TAG, "S7 runPrecaptureSequence captured");
         } catch (CameraAccessException e) {
+            Log.d(TAG, "S7 runPrecaptureSequence CameraAccessException");
             e.printStackTrace();
         } catch (IllegalStateException e) {
+            Log.d(TAG, "S7 runPrecaptureSequence IllegalStateException");
             e.printStackTrace();
         }
     }
@@ -567,12 +607,15 @@ public class CameraApi2Controller extends CameraController {
                                                TotalCaptureResult result) {
                     Log.d(TAG, "Still camera captureCallback");
                     unlockFocus();
+                    captureStillInProgress = false;
                 }
             };
             captureSession.capture(captureBuilder.build(), captureCallback, backgroundHandler);
         } catch (CameraAccessException e) {
+            Log.d(TAG, "S7 captureStillPicture CameraAccessException");
             e.printStackTrace();
         } catch (IllegalStateException e) {
+            Log.d(TAG, "S7 captureStillPicture IllegalStateException");
             e.printStackTrace();
         }
     }

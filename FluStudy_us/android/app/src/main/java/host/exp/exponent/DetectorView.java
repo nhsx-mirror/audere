@@ -24,6 +24,7 @@ import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Size;
@@ -31,15 +32,21 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import host.exp.exponent.customview.AutoFitTextureView;
 import host.exp.exponent.env.ImageUtils;
@@ -93,6 +100,8 @@ public class DetectorView extends LinearLayout implements
     private volatile int previewFrameIndex = 0;
 
     private boolean processFrames = false;
+
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS");
 
     public DetectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -247,7 +256,9 @@ public class DetectorView extends LinearLayout implements
             initialized = true;
         }
 
-        /** Callback for Camera2 API */
+        /**
+         * Callback for Camera2 API
+         */
         @Override
         public void onImageAvailable(ImageReader reader) {
             // We need to wait until we have some size from onPreviewSizeChosen
@@ -314,7 +325,9 @@ public class DetectorView extends LinearLayout implements
             }
         }
 
-        /** Callback for android.hardware.Camera API */
+        /**
+         * Callback for android.hardware.Camera API
+         */
         protected void onFrame(byte[] bytes, Camera camera, boolean isStill) {
             if (previewSize == null) {
                 Camera.Size currentPreviewSize = camera.getParameters().getPreviewSize();
@@ -449,6 +462,7 @@ public class DetectorView extends LinearLayout implements
         }
 
         int debugImageCounter = 0;
+
         protected String saveDebugImage(Bitmap bitmap, String description) {
             File debugImages = new File("/sdcard/debug-images");
             debugImages.mkdirs();
@@ -480,6 +494,55 @@ public class DetectorView extends LinearLayout implements
                 return null;
             }
         }
+    }
+
+    public static void uploadLog(String caller, MainActivity activity) {
+        File logFolder = new File(activity.getFilesDir(), "logs");
+        if (!logFolder.exists()) {
+            Log.d(TAG, "Making logs folder: " + logFolder);
+            logFolder.mkdir();
+            Log.d(TAG, "Made logs folder: " + logFolder);
+        }
+        String filename = caller + "_" + dateFormat.format(new Date()) + ".log";
+        File logFile = new File(logFolder, filename);
+        try {
+            Log.d(TAG, "Log generating to: " + logFile.getAbsolutePath());
+            String[] cmd = new String[]{"logcat", "-f", logFile.getAbsolutePath(),
+                    "-v", "time", "ActivityManager:W", "fluathome:D"};
+            Process p = Runtime.getRuntime().exec(cmd);
+//            p.waitFor(100, TimeUnit.MILLISECONDS);
+            TimeUnit.MILLISECONDS.sleep(100);
+            Log.d(TAG, "Log generated to: " + logFile.getAbsolutePath());
+
+//            Uri uri_0 = FileProvider.getUriForFile(activity,
+//                    BuildConfig.APPLICATION_ID + ".provider", logFile);
+            Uri uri = Uri.fromFile(logFile);
+
+//                // email the log file
+//                Intent intent = new Intent(Intent.ACTION_SEND);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                intent.putExtra(Intent.EXTRA_STREAM, uri);
+//                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "yongshao@auderenow.org" });
+//                intent.setType("multipart/");
+//                activity.startActivity(intent);
+//                cleanupLog(logFile);
+
+            // upload the log file to firebase storage
+            final StorageReference destination = FirebaseStorage.getInstance().getReference()
+                    .child("logs/fluathome_us/" + filename);
+            Log.d(TAG, "  uploading to '" + destination.toString() + "'");
+            destination.putFile(uri)
+                    .addOnCompleteListener(snapshot -> deleteFile(logFile));
+            Log.d(TAG, "  uploaded to '" + destination.toString() + "'");
+        } catch (Exception e) {
+            Log.e(TAG, "upload failure", e);
+        }
+    }
+
+    private static void deleteFile(File file) {
+        file.delete();
+        Log.d(TAG, "deleted log " + file.getAbsolutePath());
     }
 
     public class PreviewImageListener extends ImageListener implements Camera.PreviewCallback {
@@ -561,6 +624,7 @@ public class DetectorView extends LinearLayout implements
             Log.d(TAG, "Processing still frame");
             List<Classifier.Recognition> mappedRecognitions = runPhaseOne();
             RDTTracker.RDTStillFrameResult rdtResult = rdtTracker.extractRDTFromStillFrame(mappedRecognitions, imageBitmap);
+            Log.d(TAG, "S7 " + rdtResult.toString());
 
             if (rdtResult != null && rdtResult.testArea != null) {
                 Log.d(TAG, "Have good still frame (extracted test area), running inference");
@@ -572,13 +636,16 @@ public class DetectorView extends LinearLayout implements
 
                 if (phase2ResultList.size() > 0) {
                     Classifier.Recognition phase2Result = phase2ResultList.get(0);
+                    Log.d(TAG, "S7 " + phase2Result.toString());
                     InterpretationResult interpretationResult = InterpretationTracker.interpretResults(
                             phase2Result,
                             rdtResult, activity.isDebug());
+                    Log.d(TAG, "S7 " + interpretationResult.toString());
 
                     Log.i(TAG, "Phase 2 processing time: " + (SystemClock.uptimeMillis() - interpretationStartTimeMs) + "ms");
 
                     interpretationResult.imageUri = saveImage(imageBitmap, RDT_PHOTO_FILE_NAME);
+                    Log.d(TAG, "S7 saved image to " + interpretationResult.imageUri);
                     interpretationResult.resultWindowImageUri = saveImage(rdtResult.testArea, RDT_TEST_AREA_PHOTO_FILE_NAME);
                     if (activity.isDebug()) {
                         saveIntermediateResutls(interpretationResult);
@@ -586,6 +653,7 @@ public class DetectorView extends LinearLayout implements
                     if (interpretationResult.imageUri != null) {
                         cameraController.onPause();
                         detectorListener.onRDTInterpreted(interpretationResult);
+                        uploadLog(TAG + "_interpretation", activity);
                         return;
                     } else {
                         Log.d(TAG, "Error saving still frame, will try again");
@@ -598,6 +666,8 @@ public class DetectorView extends LinearLayout implements
             }
             cameraController.onResume(); // Legacy camera requires explicit resume, this is a no-op for the camera2 api
             stillCaptureInProgress = false;
+            // upload the log file
+            uploadLog(TAG + "_nointerpretation", activity);
         }
 
         @Override
