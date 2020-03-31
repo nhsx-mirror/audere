@@ -551,7 +551,6 @@ public class CameraApi2Controller extends CameraController {
                     cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
 
             captureBuilder.addTarget(stillReader.getSurface());
-            captureBuilder.addTarget(new Surface(textureView.getSurfaceTexture()));
 
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
