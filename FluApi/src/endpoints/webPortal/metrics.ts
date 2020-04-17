@@ -1115,6 +1115,14 @@ export async function getFeverMetrics(
       return surveyComplete.at;
     }
   };
+  const getCleanFirstTestTime = row => {
+    const surveyComplete = row.survey.events.find(
+      item => item.refId === "CleanFirstTest"
+    );
+    if (surveyComplete) {
+      return surveyComplete.at;
+    }
+  };
   const getFinishTime = row => {
     if (row.survey.workflow.surveyCompletedAt)
       return row.survey.workflow.surveyCompletedAt;
@@ -1201,6 +1209,7 @@ export async function getFeverMetrics(
     const kitOrderTime = getKitOrderTime(row);
     const scanTime = getScanTime(row);
     const surveyCompleteTime = getSurveyCompleteTime(row);
+    const firstTestCleanTime = getCleanFirstTestTime(row);
     const part1Symptoms = getPart1Sypmtoms(row);
     const part2Symptoms = getPart2Sypmtoms(row);
     studyIdData.push({
@@ -1221,6 +1230,7 @@ export async function getFeverMetrics(
       ordertoscan: getTimeDifference(kitOrderTime, scanTime),
       questionscompletedtime: surveyCompleteTime,
       scantosurveyfinish: getTimeDifference(scanTime, surveyCompleteTime),
+      imagesubmittedtime: firstTestCleanTime,
       finishtime: getFinishTime(row),
       kitreceiveddate: row["fever_received_kit.dateReceived"],
       firsttestfeedback: getTest1Feedback(row),
@@ -1622,6 +1632,14 @@ export async function getFeverExcelReport(startDate: string, endDate: string) {
     scantosurveyfinish: {
       displayName: "Barcode Scan to Survey Finish",
       headerStyle: styles.columnHeader,
+      width: 150,
+    },
+    imagesubmittedtime: {
+      displayName: "Image Submitted (" + getTimezoneAbbrev() + ")",
+      headerStyle: styles.columnHeader,
+      cellFormat: function(value, row) {
+        return !!value ? toStudyDateString(value) : value;
+      },
       width: 150,
     },
     finishtime: {
