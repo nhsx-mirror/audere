@@ -272,16 +272,8 @@ jobs:
           name: Snyk Chills Scan
           command: |
             cd FluStudy_us
-            yarn list --json > ~/current_packages
-            git show $(git merge-base HEAD origin/master):./yarn.lock > yarn.lock
-            git show $(git merge-base HEAD origin/master):./package.json > package.json
-            yarn list --json > ~/master_packages
-            if cmp --silent ~/{current,master}_packages; then
-              echo "No new packages have been added to yarn.lock."
-            else
-              sudo npm install -g snyk
-              snyk test --org=auderenow --severity-threshold=high
-            fi
+            sudo npm install -g snyk
+            snyk test --org=auderenow --severity-threshold=high
       - run:
           name: Cough Yarn Install
           command: |
@@ -297,16 +289,7 @@ jobs:
           name: Snyk Cough Scan
           command: |
             cd FluStudy_au
-            yarn list --json > ~/current_packages
-            git show $(git merge-base HEAD origin/master):./yarn.lock > yarn.lock
-            git show $(git merge-base HEAD origin/master):./package.json > package.json
-            yarn list --json > ~/master_packages
-            if cmp --silent ~/{current,master}_packages; then
-              echo "No new packages have been added to yarn.lock."
-            else
-              sudo npm install -g snyk
-              snyk test --org=auderenow --severity-threshold=high
-            fi
+            snyk test --org=auderenow --severity-threshold=high
       - run:
           name: Server Yarn Install
           command: |
@@ -322,16 +305,7 @@ jobs:
           name: Snyk Server Scan
           command: |
             cd FluApi
-            yarn list --json > ~/current_packages
-            git show $(git merge-base HEAD origin/master):./yarn.lock > yarn.lock
-            git show $(git merge-base HEAD origin/master):./package.json > package.json
-            yarn list --json > ~/master_packages
-            if cmp --silent ~/{current,master}_packages; then
-              echo "No new packages have been added to yarn.lock."
-            else
-              sudo npm install -g snyk
-              snyk test --org=auderenow --severity-threshold=high
-            fi
+            snyk test --org=auderenow --severity-threshold=high
       - save_cache:
           key: chills-node-cache-{{ checksum "FluStudy_us/package.json" }}
           paths:
@@ -664,10 +638,10 @@ workflows:
   weekly:
     triggers:
       - schedule:
-          cron: "10 12 * * 4" # Every Thurs 4:10am PST / 5:10am PDT
+          cron: "35 4 * * 4" # Every Thurs 4:10am PST / 5:10am PDT
           filters:
             branches:
               only:
-                - master
+                - fix-snyk
     jobs:
       - snyk_scan
