@@ -638,10 +638,10 @@ workflows:
   weekly:
     triggers:
       - schedule:
-          cron: "35 4 * * 4" # Every Thurs 4:10am PST / 5:10am PDT
+          cron: "10 12 * * 4" # Every Thurs 4:10am PST / 5:10am PDT
           filters:
             branches:
               only:
-                - fix-snyk
+                - master
     jobs:
       - snyk_scan
