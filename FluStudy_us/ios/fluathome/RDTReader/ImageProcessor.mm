@@ -73,15 +73,15 @@ NSString *instruction_too_large = @"Place RDT at the center.\nFit RDT to the rec
 NSString *instruction_focusing = @"Place RDT at the center.\nFit RDT to the rectangle.\nCamera is focusing. \nStay still.";
 NSString *instruction_unfocused = @"Place RDT at the center.\n Fit RDT to the rectangle.\nCamera is not focused. \nMove further away.";
 
-Ptr<BRISK> detector;
-Ptr<BFMatcher> matcher;
+cv::Ptr<BRISK> detector;
+cv::Ptr<BFMatcher> matcher;
 Mat refImg;
 Mat refDescriptor;
 vector<KeyPoint> refKeypoints;
 int mMoveCloserCount;
 
-Ptr<SIFT> siftDetector;
-Ptr<BFMatcher> siftMatcher;
+cv::Ptr<SIFT> siftDetector;
+cv::Ptr<BFMatcher> siftMatcher;
 vector<KeyPoint> siftRefKeypoints;
 Mat siftRefDescriptor;
 
@@ -1002,7 +1002,7 @@ Mat siftRefDescriptor;
     cvtColor(inputMat, result, COLOR_RGBA2RGB);
     cvtColor(result, result, COLOR_RGB2HLS);
     
-    Ptr<CLAHE> clahe = createCLAHE(10, tile);
+    cv::Ptr<CLAHE> clahe = createCLAHE(10, tile);
     
     vector<Mat> channels;
     cv::split(result, channels);
