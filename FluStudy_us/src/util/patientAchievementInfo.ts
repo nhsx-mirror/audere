@@ -20,6 +20,9 @@ export async function getBarcodeNextScreen() {
     return "BarcodeConnectionToServerError";
   }
 
+  // Pretend that barcode is fine
+  return "EmailConfirmation";
+
   const secret = createAccessKey();
   const patientAchievementInfo = await getPatientAchievementInfo(
     state.survey.kitBarcode.code,
@@ -99,6 +102,8 @@ export async function getEmailConfirmationTextVariables() {
 }
 
 export async function getEmailConfirmationNextScreen() {
+  return "Unpacking";
+
   const state: StoreState = (await getStore()).getState();
   const hash = await NativeModules.Aes.pbkdf2(
     state.meta.enteredEmail.toLowerCase(),

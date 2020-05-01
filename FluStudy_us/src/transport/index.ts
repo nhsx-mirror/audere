@@ -9,6 +9,8 @@ import Constants from "expo-constants";
 const IS_NODE_ENV_DEVELOPMENT = process.env.NODE_ENV === "development";
 
 export function getApiBaseUrl(): string {
+  return "https://example.example/";
+
   let api: string;
   if (process.env.REACT_NATIVE_API_SERVER) {
     api = process.env.REACT_NATIVE_API_SERVER;
