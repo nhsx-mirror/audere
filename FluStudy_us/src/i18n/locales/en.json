@@ -339,7 +339,7 @@
   },
   "ManualEntry": {
     "title": "Enter your barcode",
-    "desc": "Enter the code found below the barcode symbol on the top right corner of your flu@home test kit."
+    "desc": "Enter the code found below the barcode symbol on the top right corner of your flu@home test kit.  **(Just enter 10 letters or numbers)**"
   },
   "BarcodeContactSupport": {
     "title": "Invalid barcode",
@@ -353,7 +353,7 @@
   },
   "EmailConfirmation": {
     "title": "Verify your email",
-    "desc": "Now let's confirm that your kit (barcode {{barcode}}) matches your Achievement account.\n\nEnter the email address you use for Achievement. Here is a hint:\n\n**{{emailHint}}**"
+    "desc": "Now let's confirm that your kit (barcode {{barcode}}) matches your Achievement account.\n\nEnter the email address you use for Achievement. Here is a hint:\n\n**{{emailHint}}**\n\n**(Enter any email address, it doesn't matter)"
   },
   "EmailError": {
     "title": "Cannot verify email",
