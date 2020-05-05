@@ -4,6 +4,8 @@
 // can be found in the LICENSE file distributed with this file.
 //
 
+// TODO: Replace Firebase with custom photo store
+
 #import <Foundation/Foundation.h>
 #import "FirebaseStorageUploadModule.h"
 #import <React/RCTLog.h>

@@ -5,7 +5,7 @@
 
 import Constants from "expo-constants";
 import DeviceInfo from "react-native-device-info";
-import firebase from "react-native-firebase";
+// import firebase from "react-native-firebase";
 import { recordErrorToFirebase } from "../crashReporter";
 
 const FIREBASE_LOG_TO_CONSOLE =
@@ -18,7 +18,16 @@ let eventGlobals = {
   is_demo: false,
 };
 
-const tracker = firebase.analytics();
+// TODO: Replace with custom analytics implementation, or
+//       remove analytics entirely
+// const tracker = firebase.analytics();
+const tracker = {
+  logEvent: (x: string, y?: Object) => {},
+  setAnalyticsCollectionEnabled: (x: boolean) => {},
+  setCurrentScreen: (x: string | null, y?: string) => {},
+  setUserId: (x: string | null) => {},
+  setUserProperty: (x: string, y: string | null) => {},
+};
 
 const demoModeEvent = "app_demo_mode_change";
 export const notificationEvent = "push_notification_event";

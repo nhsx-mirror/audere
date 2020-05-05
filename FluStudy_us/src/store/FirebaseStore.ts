@@ -45,6 +45,7 @@ export async function syncSurvey(docId: string, survey: SurveyNonPIIInfo) {
       documentType: DocumentType.Survey,
       survey,
     });
+    // TODO: Replace Firestore with custom implementation
     const doc = getSurveyCollection().doc(docId);
     await doc.set(surveyDocument);
   } catch (e) {
@@ -67,6 +68,7 @@ export async function syncPhoto(docId: string) {
         photoId: docId,
       },
     });
+    // TODO: Replace Firestore with custom implementation
     const doc = getPhotoCollection().doc(docId);
     await doc.set(photoDocument);
   } catch (e) {

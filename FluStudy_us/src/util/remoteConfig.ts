@@ -4,7 +4,7 @@
 // can be found in the LICENSE file distributed with this file.
 
 import { AsyncStorage, NetInfo } from "react-native";
-import firebase from "react-native-firebase";
+// import firebase from "react-native-firebase";
 import { crashlytics } from "../crashReporter";
 import { logFirebaseEvent, AppEvents, AppHealthEvents } from "../util/tracker";
 
@@ -36,8 +36,18 @@ const DEV_CONFIG_OVERRIDES = {};
 
 let _currentConfig: RemoteConfig = Object.assign({}, DEFAULT_CONFIGS);
 
+// TODO: Replace with custom remote config implementation, or
+//       remove remote config entirely
+// const config = firebase.config();
+const config = {
+  activateFetched: async () => {},
+  enableDeveloperMode: () => {},
+  fetch: async (x?: number) => {},
+  getValues: async (x: string[]): Promise<any> => ({}),
+  setDefaults: (x: object) => {},
+};
+
 async function loadConfig(): Promise<RemoteConfig> {
-  const config = firebase.config();
   const remoteConfigSnapshots = await config.getValues(
     Object.getOwnPropertyNames(DEFAULT_CONFIGS)
   );
@@ -111,8 +121,6 @@ export function getRemoteConfig(key: string): any {
 const SECONDS_IN_HOUR = 60 * 60;
 
 export async function loadAllRemoteConfigs() {
-  const config = firebase.config();
-
   if (process.env.NODE_ENV === "development") {
     // This removes all caching and basically fetches the config each time
 

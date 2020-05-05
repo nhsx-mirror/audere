@@ -7,7 +7,7 @@
 // not need anything else from our project, but instead only pull from third
 // party libraries so that it can be used anywhere in our project.
 
-import firebase from "react-native-firebase";
+// import firebase from "react-native-firebase";
 import { AnyAction, Dispatch, MiddlewareAPI } from "redux";
 import Constants from "expo-constants";
 import { memoize } from "./util/memoize";
@@ -16,7 +16,16 @@ export type ErrorProps = {
   errorMessage: string;
 };
 
-export const crashlytics = firebase.crashlytics();
+// TODO: Replace with custom crash reporting, or
+//       remove crash reporting entirely
+// Disable all Firebase calls
+// export const crashlytics = firebase.crashlytics();
+export const crashlytics = {
+  log: (x: string) => {},
+  recordError: (x: number, y: string) => {},
+  setStringValue: (x: string, y: string) => {},
+  setUserIdentifier: (x: string) => {},
+};
 
 // The latest react-native-firebase uses a different signature than the
 // outdated Fabric version (react-native-fabric).  The firebase version takes
