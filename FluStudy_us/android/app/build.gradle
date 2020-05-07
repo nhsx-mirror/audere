@@ -131,7 +131,6 @@ dependencies {
   implementation project(':react-native-modal-translucent')
   implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
   implementation project(':react-native-push-notification')
-  implementation project(':react-native-fbsdk')
   implementation project(':react-native-firebase')
   implementation project(':react-native-get-random-values')
   implementation fileTree(include: ['*.jar'], dir: 'libs')
