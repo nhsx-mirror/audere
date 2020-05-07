@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
 // Copyright (c) 2018, 2019 by Audere
 //
-// Use of this source code is governed by an MIT-style license that
+// Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 
 import os, { tmpdir } from "os";
