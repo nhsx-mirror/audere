@@ -23,7 +23,7 @@ You don't want to upgrade because ExpoKit is meant to run on a specific version 
 This sync will pull down a bunch of projects (e.g. react-native-firebase, etc etc).
 
 6. 
-From LastPass Shared-Engineering folder, find Chills Staging google-services.json and save this as FluStudy_us/android/app/google-services.json
+From LastPass Shared-Engineering folder, find Chills Staging google-services.json and save this as FluStudy_us/android/app/google-services.json (Note: Make sure the package_name field matches the app you are loading, e.g. "org.audere.flustudy_us")
 
 7.
 Select Gradle Scripts -> build.gradle (Project: android) in the Project left nav, then Build -> Make Project.
