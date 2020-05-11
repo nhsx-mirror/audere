@@ -130,8 +130,34 @@ export const Screens: ScreenConfig[] = [
           deniedNext: "CameraSettings",
         },
       },
+      {
+        tag: ContinueButton,
+        props: {
+          label: "common:button:skip",
+          next: "Unpacking"
+        },
+      },
     ],
     automationNext: "ManualEntry",
+  },
+  {
+    key: "Unpacking",
+    body: [
+      { tag: MainImage, props: { uri: "setupkitbox" } },
+      { tag: Title },
+      {
+        tag: BulletPointsComponent,
+        props: { label: "desc" },
+      },
+      {
+        tag: ContinueButton,
+        props: { next: "StripInTube" },
+      },
+    ],
+    chromeProps: {
+      onBack: resetAlert,
+    },
+    workflowEvent: "surveyStartedAt",
   },
   {
     key: "Scan",
@@ -257,55 +283,68 @@ export const Screens: ScreenConfig[] = [
     ],
   },
   {
-    key: "SwabInTube",
+    key: "StripInTube",
     body: [
-      { tag: MainImage, props: { uri: "putswabintube" } },
+      { tag: MainImage, props: { uri: "putteststripintube" } },
       { tag: Title },
       {
         tag: BulletPointsComponent,
         props: { label: "desc" },
       },
-    ],
-    footer: [
       {
         tag: ContinueButton,
         props: {
-          dispatchOnNext: () => setOneMinuteStartTime(),
-          label: "startTimer",
-          next: "FirstTimer",
-          showButtonStyle: true,
+          dispatchOnNext: () => setTenMinuteStartTime(),
+          next: "Timer",
         },
       },
     ],
   },
   {
-    key: "FirstTimer",
+    key: "Timer",
     body: [
       {
         tag: TimerRing,
         props: {
-          startTimeConfig: "oneMinuteStartTime",
-          totalTimeMs: MINUTE_MS,
-          dispatchOnDone: setOneMinuteTimerDone,
-        },
-      },
-      { tag: Title },
-      {
-        tag: DidYouKnow,
-        props: {
-          startTimeConfig: "oneMinuteStartTime",
-          msPerItem: 11 * SECOND_MS,
+          startTimeConfig: "tenMinuteStartTime",
+          totalTimeMs: TEST_STRIP_MS,
+          dispatchOnDone: setTenMinuteTimerDone,
         },
       },
       {
         tag: SelectableComponent,
         props: {
           components: [
-            null,
-            { tag: ContinueButton, props: { next: "RemoveSwabFromTube" } },
+            [
+              { tag: Title, props: { center: false } },
+              { tag: ScreenText, props: { label: "desc" } },
+              null,
+            ],
+            [
+              { tag: Title, props: { center: false, label: "titleTimerUp" } },
+              { tag: ContinueButton, props: { next: "TestStripReady" } },
+            ],
           ],
-          componentSelectorProp: "oneMinuteTimerDone",
-          keyBase: "FirstTimer",
+          componentSelectorProp: "tenMinuteTimerDone",
+          keyBase: "TimerChangeover",
+        },
+      },
+    ],
+  },
+  {
+    key: "TestStripReady",
+    body: [
+      { tag: MainImage, props: { uri: "removeteststrip" } },
+      { tag: Title },
+      {
+        tag: BulletPointsComponent,
+        props: { label: "desc" },
+      },
+      {
+        tag: ContinueButton,
+        props: {
+          dispatchOnNext: setTotalTestStripTime,
+          next: "RDTInstructions",
         },
       },
     ],

@@ -12,7 +12,8 @@
       "next": "Next",
       "ok": "Ok",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "skip": "Skip"
     },
     "notifications": {
       "title": "Timer is complete!",
@@ -91,6 +92,7 @@
     "rdtReader": "Go to RDT Reader"
   },
   "ScanInstructions": {
+    
     "title": "Scan the barcode",
     "desc": "Locate the barcode on the outside of the flu@home test kit in the top right corner.\n\nThe next screen will ask for access to your camera to scan the barcode.\n\nIf your kit doesn't have a barcode, [contact support](CONTACTSUPPORT)."
   },
@@ -191,6 +193,23 @@
       "source": "CDC website",
       "url": "https://www.cdc.gov/flu/season/faq-flu-season-2019-2020.htm"
     }
+  },
+  "Unpacking": {
+    "title": "Set up your kit box",
+    "desc": "Open the kit box.\nRemove the two bags from the pouch on the kit lid and set them aside.\nPick up the small bag from the left (Test 1) side of the box.\nRemove the saline vial and tube.\nRemove the stopper from the tube.\nStand up the tube in the small hole."
+  },
+  "StripInTube": {
+    "title": "Put test strip in tube",
+    "desc": "The arrows on the test strip should be **pointing down** as you lower it into the tube. Make sure the strip is touching the liquid in the bottom.\nLeave the test strip in the tube. It needs to be there for at least 10 minutes. We will let you know when to take it out.\nIn the meantime, please answer some questions so we can better understand how this illness has affected you."
+  },
+  "Timer": {
+    "title": "Please wait for timer",
+    "desc": "Thank you for completing the survey.\n\nYour test strip is still processing. When the timer ends, the app will direct you to the next step.",
+    "titleTimerUp": "Timer finished!"
+  },
+  "TestStripReady": {
+    "title": "Remove test strip",
+    "desc": "Remove the test strip from the tube.\nPlace the test strip in the middle of the kit box with the arrows pointing down towards you.\nPut the grey stopper securely back on the tube."
   },
   "RDTInstructions": {
     "title": "Scan your test strip",
