@@ -1,0 +1,9 @@
+git_url "ssh://au-aws-git/v1/repos/signing"
+
+
+type "development" # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier ["org.auderenow.fluathome-us.dev", "org.auderenow.fluathome-us"]
+username "ios-dev@auderenow.org" # Your Apple Developer Portal username
+
+# For all available options run `fastlane match --help`

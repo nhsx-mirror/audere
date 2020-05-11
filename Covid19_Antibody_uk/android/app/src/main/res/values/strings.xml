@@ -1,0 +1,25 @@
+<resources>
+  <string name="app_name">Antibody Test</string>
+  <string name="dev_activity_name">Exponent Dev</string>
+  <string name="preference_file_key">host.exp.exponent.SharedPreferences</string>
+  <string name="error_header">Something went wrong.</string>
+  <string name="error_default_client">Sorry about that. You can go back to Expo home or try to reload the Experience.</string>
+  <string name="error_default_shell">Sorry about that. Press the reload button to try again.</string>
+  <string name="error_unable_to_load_experience">Unable to load Experience.</string>
+  <string name="error_uncaught">Uncaught Error: %s</string>
+  <string name="view_error_log">View error log</string>
+  <string name="default_notification_channel_group">Default</string>
+  <string name="persistent_notification_channel_name">Experience notifications</string>
+  <string name="persistent_notification_channel_desc">Persistent notifications that provide debug info about open experiences</string>
+
+  <string name="progress_final">Captured! Analyzing the image…</string>
+  <string name="instruction_detected"><![CDATA[RDT detected at the center!]]></string>
+  <string name="instruction_pos"><![CDATA[Place RDT at the center.\nFit RDT to the rectangle.]]></string>
+  <string name="instruction_too_small"><![CDATA[Place RDT at the center.\nFit RDT to the rectangle.\nMove closer.]]></string>
+  <string name="instruction_focusing"><![CDATA[Place RDT at the center.\nFit RDT to the rectangle.\nCamera is focusing. \nStay still.]]></string>
+  <string name="instruction_unfocused"><![CDATA[Place RDT at the center.\n Fit RDT to the rectangle.\nCamera is not focused. \nMove further away.]]></string>
+  <string name="quality_msg_format"> <![CDATA[POSITION/SIZE: %s <br> SHARPNESS: %s <br> BRIGHTNESS: %s <br> NO SHADOW: %s]]></string>
+  <string name="quality_msg_format_text"> <![CDATA[%s <br> %s <br> %s <br> %s]]></string>
+  <string name="request_permission">This app needs camera permission.</string>
+  <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+</resources>

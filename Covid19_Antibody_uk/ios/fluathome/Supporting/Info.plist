@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>lateral flow</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>FluAtHome</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.5</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb270588223842056</string>
+				<string>expdcd6f73fcd53486284683e2a09a2d545</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>OAuthRedirect</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>org.auderenow.fluathome-us</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>dynamicLinkInbound</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>org.auderenow.fluathome-us.dynlink</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>63</string>
+	<key>FacebookAppID</key>
+	<string>270588223842056</string>
+	<key>FacebookDisplayName</key>
+	<string>flu@home</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict/>
+	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow flu@home to access your calendar</string>
+	<key>NSCameraUsageDescription</key>
+	<string>flu@home needs to use your camera to scan your barcode and test strip.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow flu@home to access your contacts</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow flu@home to use your location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow flu@home to access your microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Allow flu@home to access your device&apos;s accelerometer</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Give flu@home permission to save photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Give flu@home permission to access your photos</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Allow flu@home to access your reminders</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>circlenumbers.ttf</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array/>
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+</dict>
+</plist>

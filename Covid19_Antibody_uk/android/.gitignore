@@ -1,0 +1,8 @@
+# Used for each person's Android Studio build, but shouldn't be in source control
+local.properties
+
+# build files
+/build
+
+/openCVLibrary341-contrib
+/app/src/main/jniLibs

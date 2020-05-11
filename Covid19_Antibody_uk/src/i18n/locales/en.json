@@ -1,0 +1,266 @@
+{
+  "common": {
+    "button": {
+      "continue": "Continue",
+      "save": "Save",
+      "select": "Select",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "tryAgain": "Try Again",
+      "done": "Done",
+      "back": "Back",
+      "next": "Next",
+      "ok": "Ok",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "notifications": {
+      "title": "Timer is complete!",
+      "oneMinuteStartTime": "Next you'll remove your swab from the tube.",
+      "tenMinuteStartTime": "Next you'll remove your test strip from the tube.",
+      "connectionErrorTitle": "Connection Error",
+      "connectionError": "It looks like your {{device}} is disconnected at the moment. To send your data, please open the app again when you are connected and tap \"Try Again.\"",
+      "resetAppAlertTitle": "Reset app?",
+      "resetAppAlertBody": "\nDo you want to restart the test with a different kit?\n\nSaying Yes will reset the app."
+    },
+    "device": {
+      "ios++handset": "iPhone",
+      "ios++tablet": "iPad",
+      "android++handset": "phone",
+      "android++tablet": "tablet",
+      "unknown": "device",
+      "iosHint": " >"
+    },
+    "timer": {
+      "timerDone": "Finished!"
+    },
+    "emailEntry": {
+      "placeholder": "Enter your email",
+      "emailRequired": "Please enter your email to continue.",
+      "emailInvalid": "That doesn't appear to be a valid email address. Please try again."
+    },
+    "requiredHint": {
+      "desc": "Required question"
+    }
+  },
+  "datePicker": {
+    "selectDate": "Select date"
+  },
+  "monthPicker": {
+    "selectDate": "Select date",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "menu": {
+    "fluAtHomeHelp": "FLU@HOME HELP"
+  },
+  "buildInfo": {
+    "version": "**Version:** ",
+    "build": "\n**Build:** ",
+    "commit": "\n**Commit:** ",
+    "date": "\n**Date:** ",
+    "device": "\n**Device:** ",
+    "installation": "\n**Installation:** ",
+    "apiServer": "\n**API Server:** ",
+    "copy": "Copy"
+  },
+  "Version": {
+    "title": "App Version",
+    "description": "Copyright © 2020 Audere.\nAll rights reserved."
+  },
+  "ContactSupport": {
+    "title": "Contact Support",
+    "description": "Contact us with study questions or problems with the test procedure, kit contents, or the flu@home app. The email address and phone number will be monitored for 6 months after study completion.",
+    "emailSupport": "EMAIL SUPPORT",
+    "callSupport": "Call (415) 417-1905"
+  },
+  "Welcome": {
+    "title": "Welcome",
+    "desc": "We know you aren't feeling well right now. Thank you for participating even when you're sick.*\n\nWith your help, we want to understand if people (like you) can test themselves at home for the flu. But first, we'll walk you through a few things.",
+    "desc2": "* You must be enrolled in the Achievement --Home Testing of Respiratory Illness-- study to participate. [Tap here if you are not enrolled.](PUSHNAVIGATE:NotEnrolledInStudy)",
+    "rdtReader": "Go to RDT Reader"
+  },
+  "ScanInstructions": {
+    "title": "Scan the barcode",
+    "desc": "Locate the barcode on the outside of the flu@home test kit in the top right corner.\n\nThe next screen will ask for access to your camera to scan the barcode.\n\nIf your kit doesn't have a barcode, [contact support](CONTACTSUPPORT)."
+  },
+  "barcode": {
+    "yourCode": "**Your code**: {{barcode}}",
+    "sorry": "Sorry",
+    "invalidBarcode": "{{barcode}} doesn't look like a flu@home kit barcode. Please try again.",
+    "barcodeRequired": "Please enter your kit's barcode to continue.",
+    "dontMatch": "Those barcodes don't match. Please try again.",
+    "placeholder": "Enter barcode",
+    "secondPlaceholder": "Confirm barcode"
+  },
+  "BarcodeScanner": {
+    "instructions": "Position barcode in middle of outline above.\nTry adjusting distance or angle if scan is taking a while.",
+    "enterManually": "Enter barcode manually"
+  },
+  "ManualEntry": {
+    "title": "Enter your barcode",
+    "desc": "Enter the code found below the barcode symbol on the top right corner of your flu@home test kit.  **(Just enter 10 letters or numbers)**"
+  },
+  "BarcodeContactSupport": {
+    "title": "Invalid barcode",
+    "desc": "We're sorry, but the barcode you entered ({{barcode}}) did not match our records.",
+    "reenter": "Re-enter barcode",
+    "desc2": "If you are still having trouble, [contact support](CONTACTSUPPORT)."
+  },
+  "BarcodeConnectionToServerError": {
+    "title": "Connect to verify your barcode",
+    "desc": "We could not connect to verify your barcode. Once you are connected, please come back to the app and try again."
+  },
+  "EmailConfirmation": {
+    "title": "Verify your email",
+    "desc": "Now let's confirm that your kit (barcode {{barcode}}) matches your Achievement account.\n\nEnter the email address you use for Achievement. Here is a hint:\n\n**{{emailHint}}**\n\n**(Enter any email address, it doesn't matter)"
+  },
+  "EmailError": {
+    "title": "Cannot verify email",
+    "desc": "Your kit barcode {{barcode}} and email address {{enteredEmail}} did not match an Achievement account on record.\n\nYou can re-enter your email, or if you think you've grabbed the wrong kit, you can scan a different kit barcode. Select an option below to try again.",
+    "reenter": "Re-enter your email",
+    "scanAgain": "Scan a different kit barcode",
+    "desc2": "If you are still having trouble, [contact support](CONTACTSUPPORT)."
+  },
+  "Swab": {
+    "title": "Prepare Test 1 tube",
+    "desc": "Carefully twist open the saline vial.\nSqueeze the liquid carefully into the tube so that all the liquid gets into the tube."
+  },
+  "FirstTimer": {
+    "title": "Did you know?"
+  },
+  "didYouKnow": {
+    "source": "Source: ",
+    "++tip0": {
+      "description": "You may be able to spread flu to others even before you feel sick. You may be contagious 1 day before, and up to 5-7 days after becoming sick.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/about/keyfacts.htm"
+    },
+    "++tip1": {
+      "description": "Germs are often spread when a person touches something that is contaminated with germs and then touches his or her eyes, nose, or mouth.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/prevent/actions-prevent-flu.htm"
+    },
+    "++tip2": {
+      "description": "CDC estimates that many antibiotic prescriptions for acute respiratory infections (including the flu) are unnecessary because most are caused by viruses. Viruses do not respond to antibiotics.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/antibiotic-use/stewardship-report/outpatient.html"
+    },
+    "++tip3": {
+      "description": "The most important step in preventing flu is to get a flu vaccination each year. CDC recommends that you get vaccinated by the end of October.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/season/faq-flu-season-2019-2020.htm"
+    },
+    "++tip4": {
+      "description": "There are antiviral drugs that can be used to treat the flu in the first couple days of your illness. You can only get them by prescription.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/treatment/whatyoushould.htm"
+    },
+    "++tip5": {
+      "description": "On average, about 8% of the U.S. population gets sick from flu each season.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/about/keyfacts.htm"
+    },
+    "++tip6": {
+      "description": "Experts believe that the flu spreads mainly by tiny droplets made when people with flu cough, sneeze, or talk. These droplets can land in the mouths or noses of people nearby.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/about/keyfacts.htm"
+    },
+    "++tip7": {
+      "description": "Complications of flu can include bacterial pneumonia, ear infections, sinus infections and worsening of chronic medical conditions, such as congestive heart failure, asthma, or diabetes.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/about/keyfacts.htm"
+    },
+    "++tip8": {
+      "description": "Everyday preventive actions (like staying away from people who are sick, covering coughs and sneezes, and frequent handwashing) help slow the spread of the flu.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/season/faq-flu-season-2019-2020.htm"
+    },
+    "++tip9": {
+      "description": "Seasonal flu activity often begins as early as October and November and can continue to occur as late as May. It most commonly peaks in the U.S. between December and February.",
+      "source": "CDC website",
+      "url": "https://www.cdc.gov/flu/season/faq-flu-season-2019-2020.htm"
+    }
+  },
+  "RDTInstructions": {
+    "title": "Scan your test strip",
+    "desc": "Next, the app will use your camera to scan your test strip. Please note the instructions below.",
+    "instructions": "Ensure your test strip is in the middle of the kit box.",
+    "instructions2": "Hold your {{device}} flat and directly above your test strip.",
+    "desc2": "If the test strip doesn't scan within {{rdtTimeoutSeconds}} seconds, you will be asked to take a photo of it using the app."
+  },
+  "NonRDTInstructions": {
+    "title": "Take photo of test strip",
+    "desc": "Next, we'd like you to take a photo of your test strip using your {{device}}'s camera. The app will access the camera for you.",
+    "instructions": "Ensure your test strip is in the middle of the kit box.",
+    "instructions2": "Hold your {{device}} flat and directly above your test strip.",
+    "instructions3": "Tap the round button on the screen to take a photo."
+  },
+  "RDTReader": {
+    "alertTitle": "Ready to scan?",
+    "alertDesc": "Tap \"Start\" after your camera is focused on the test strip. The app will take multiple pictures during the scanning process.",
+    "start": "Start",
+    "goBack": "Go back",
+    "flash": "FLASH: ",
+    "on": "ON",
+    "off": "OFF",
+    "centerStrip": "Hold your {{device}} flat and directly above the test strip",
+    "holdSteady": "Hold steady",
+    "tooBig": "Raise your {{device}}",
+    "tooSmall": "Lower your {{device}}",
+    "underExposed": "Turn on the flash or move to better lighting",
+    "overExposed": "Ensure test strip is on the kit box and avoid glare from bright lights",
+    "overExposedWithFlash": "Turn off the flash"
+  },
+  "CameraSettings": {
+    "title": "Camera access required",
+    "desc": "We're sorry, but using your {{device}}'s camera is required to continue with the test. If you'd like to continue, please update your settings.\n\n**How to Update:**",
+    "howToIOS": "**Go to Settings / Privacy / Camera / flu@home.**\n**Flip the switch to \"Yes\".**\n**Please note: When you return, the camera will be active.**",
+    "howToAndroid": "**Go to Settings / Apps / flu@home / Permissions.**\n**Toggle the camera switch to on.**\n**Please note: When you return, the camera will be active.**",
+    "goToSettings": "Go to Settings"
+  },
+  "TestStripCamera": {
+    "title": "Tap the screen to focus the image.",
+    "description": "Tap the button below to take a photo",
+    "alertTitle": "We are unable to scan the test strip",
+    "alertDesc": "The app is having trouble scanning your test strip. Please take a photo of the strip.",
+    "cameraErrorTitle": "Something's gone wrong.",
+    "cameraErrorDesc": "We are unable to load the camera and will proceed without taking a photo.",
+    "error": "There was a processing error, please try again",
+    "flash": "FLASH: ",
+    "on": "ON",
+    "off": "OFF"
+  },
+  "TestStripConfirmation": {
+    "title": "Test strip captured",
+    "desc": "{{desc}}",
+    "descManual": "Your test strip photo was captured successfully.",
+    "descScanned": "Your test strip was scanned successfully.",
+    "diagnosis": "[Demo Mode only] Your test result is {{ testResult }}."
+  },
+  "Thanks": {
+    "title": "All done!",
+    "desc": "Thank you for participating in this research study and helping us find better ways to manage the flu. We hope you feel better soon. If you are concerned about your symptoms, contact your healthcare provider or [search for urgent care clinics nearby.](https://www.google.com/maps/search/urgent+care+clinics+{{city}}+{{state}})\n\nLearn more about influenza below with information from Centers for Disease Control (CDC)."
+  },
+  "PendingData": {
+    "title": "Connect to upload data",
+    "desc": "We could not connect to upload your data. Once you are connected, please come back to the app and try again.\n\nIt may take a minute to sync your data."
+  },
+  "links": {
+    "notEnrolledInStudy": "Tap here if you are not enrolled",
+    "contactSupport": "Contact support with questions",
+    "CDC": "Centers for Disease Control and Prevention: Antiviral drugs may be an option",
+    "skipTestStripPhoto": "Unable to take a picture? Skip this step",
+    "supportBody": "\n\n\n\n[Please describe your issue above this line and include the Installation ID below for a quicker response.] Installation ID: "
+  }
+}
