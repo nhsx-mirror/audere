@@ -16,7 +16,6 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
 
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
@@ -71,7 +70,6 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
             // new MainReactPackage(),
             new TranslucentModalReactPackage(),
             new ReactNativePushNotificationPackage(),
-            new FBSDKPackage(mCallbackManager),
             new RNDeviceInfo(),
             new RNFirebasePackage(),
             new RNFirebaseAnalyticsPackage(),
