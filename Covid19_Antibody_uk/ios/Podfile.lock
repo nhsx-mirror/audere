@@ -353,7 +353,7 @@ DEPENDENCIES:
   - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
   - EXCamera (from `../node_modules/expo-camera/ios`)
   - EXConstants (from `../node_modules/expo/node_modules/expo-constants/ios`)
-  - EXFileSystem (from `../node_modules/expo/node_modules/expo-file-system/ios`)
+  - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
@@ -465,7 +465,7 @@ EXTERNAL SOURCES:
     path: "../node_modules/expo/node_modules/expo-constants/ios"
   EXFileSystem:
     :path: !ruby/object:Pathname
-    path: "../node_modules/expo/node_modules/expo-file-system/ios"
+    path: "../node_modules/expo-file-system/ios"
   EXFont:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-font/ios"
