@@ -27,10 +27,12 @@ module "vpc_cidr" {
 }
 
 provider "aws" {
-  region = "us-west-2"
+  version = "~> 2.61"
+  region  = "us-west-2"
 }
 
 provider "template" {
+  version = "~> 2.1"
 }
 
 data "terraform_remote_state" "global" {
@@ -65,4 +67,3 @@ data "terraform_remote_state" "flu_db" {
     path = "/Users/billy/Downloads/terraform-staging/db/terraform.state"
   }
 }
-

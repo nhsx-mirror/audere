@@ -4,7 +4,8 @@
 // can be found in the LICENSE file distributed with this file.
 
 provider "aws" {
-  region = "us-west-2"
+  version = "~> 2.61"
+  region  = "us-west-2"
 }
 
 module "env_network" {
@@ -40,4 +41,3 @@ terraform {
     region = "us-west-2"
   }
 }
-

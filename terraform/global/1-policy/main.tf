@@ -4,7 +4,8 @@
 // can be found in the LICENSE file distributed with this file.
 
 provider "aws" {
-  region = "us-west-2"
+  version = "~> 2.61"
+  region  = "us-west-2"
 }
 
 terraform {
@@ -185,4 +186,3 @@ resource "aws_ecr_lifecycle_policy" "fluapi_ecr_repo_policy" {
 EOF
 
 }
-

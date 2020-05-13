@@ -4,7 +4,8 @@
 // can be found in the LICENSE file distributed with this file.
 
 provider "aws" {
-  region = "us-west-2"
+  version = "~> 2.61"
+  region  = "us-west-2"
 }
 
 data "terraform_remote_state" "policy" {
@@ -19,4 +20,3 @@ data "terraform_remote_state" "policy" {
 resource "aws_iam_access_key" "ecr_push" {
   user = data.terraform_remote_state.policy.outputs.ecr_push_user
 }
-
