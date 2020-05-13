@@ -4,11 +4,16 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: eu-west-2
+plugins:
+  - serverless-offline
 functions:
-  hello:
-    handler: handler.hello
+  upload:
+    handler: handler.upload
     events:
-      - http: GET hello
+      - http: POST upload
+    environment:
+      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
+      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
 resources:
   Resources:
     S3:
