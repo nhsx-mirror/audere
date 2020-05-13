@@ -10,14 +10,14 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "global-terraform.auderenow.io"
-    key = "tfstate/terraform.state"
+    key    = "tfstate/terraform.state"
     region = "us-west-2"
   }
 }
 
 resource "aws_s3_bucket" "staging_terraform" {
   bucket = "flu-staging-terraform.auderenow.io"
-  acl = "private"
+  acl    = "private"
 
   versioning {
     enabled = true
@@ -38,7 +38,7 @@ resource "aws_s3_bucket" "staging_terraform" {
 
 resource "aws_s3_bucket" "prod_terraform" {
   bucket = "flu-prod-terraform.auderenow.io"
-  acl = "private"
+  acl    = "private"
 
   versioning {
     enabled = true
@@ -56,3 +56,4 @@ resource "aws_s3_bucket" "prod_terraform" {
     }
   }
 }
+

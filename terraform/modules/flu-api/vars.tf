@@ -9,7 +9,7 @@ variable "account" {
 
 variable "app_subnet_id" {
   description = "Subnet in which applications should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "app_b_subnet_id" {
@@ -46,12 +46,12 @@ variable "cough_qualtrics_bucket" {
 
 variable "db_client_sg_id" {
   description = "Security group to open database client traffic"
-  type = "string"
+  type        = string
 }
 
 variable "dev_ssh_server_sg_id" {
   description = "Security group to open SSH server traffic"
-  type = "string"
+  type        = string
 }
 
 variable "ecs_cluster_id" {
@@ -76,37 +76,37 @@ variable "environment" {
 
 variable "fluapi_internal_client_sg_id" {
   description = "Security group to open internal Flu API client traffic"
-  type = "string"
+  type        = string
 }
 
 variable "fluapi_internal_server_sg_id" {
   description = "Security group to open internal Flu API server traffic"
-  type = "string"
+  type        = string
 }
 
 variable "fluapi_client_sg_id" {
   description = "Security group to open Flu API client traffic"
-  type = "string"
+  type        = string
 }
 
 variable "fluapi_server_sg_id" {
   description = "Security group to open Flu API server traffic"
-  type = "string"
+  type        = string
 }
 
 variable "infra_alerts_sns_topic_arn" {
   description = "ARN of SNS topic for publishing alarms"
-  type = "string"
+  type        = string
 }
 
 variable "internet_egress_sg_id" {
   description = "Security group to open internet egress"
-  type = "string"
+  type        = string
 }
 
 variable "public_http_sg_id" {
   description = "Security group to open public HTTP/S ingress"
-  type = "string"
+  type        = string
 }
 
 variable "region" {
@@ -119,9 +119,10 @@ variable "ssm_parameters_key_arn" {
 
 variable "transient_subnet_id" {
   description = "Subnet in which the transient resources, such as Lambdas and bootstrap/provisioning, should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "vpc_id" {
   description = "Identifier for the VPC"
 }
+

@@ -24,3 +24,4 @@ variable "home_size_gb" {
 variable "home_volume_letter" {
   default = "h"
 }
+

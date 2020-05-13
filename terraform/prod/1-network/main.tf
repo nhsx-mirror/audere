@@ -10,14 +10,14 @@ provider "aws" {
 module "env_network" {
   source = "../../modules/network"
 
-  app_cidr = "${module.vpc_cidr.prod_app_cidr}"
-  bastion_cidr_whitelist = "${var.bastion_cidr_whitelist}"
-  db_cidr = "${module.vpc_cidr.prod_db_cidr}"
-  dev_cidr = "${module.vpc_cidr.prod_dev_cidr}"
-  environment = "prod"
-  vpc_cidr = "${module.vpc_cidr.vpc_prod_cidr}"
-  vpc_flow_log_arn = "${data.terraform_remote_state.global.vpc_flow_log_arn}"
-  vpc_flow_log_role_arn = "${data.terraform_remote_state.global.vpc_flow_log_role_arn}"
+  app_cidr               = module.vpc_cidr.prod_app_cidr
+  bastion_cidr_whitelist = var.bastion_cidr_whitelist
+  db_cidr                = module.vpc_cidr.prod_db_cidr
+  dev_cidr               = module.vpc_cidr.prod_dev_cidr
+  environment            = "prod"
+  vpc_cidr               = module.vpc_cidr.vpc_prod_cidr
+  vpc_flow_log_arn       = data.terraform_remote_state.global.outputs.vpc_flow_log_arn
+  vpc_flow_log_role_arn  = data.terraform_remote_state.global.outputs.vpc_flow_log_role_arn
 }
 
 module "vpc_cidr" {
@@ -26,9 +26,9 @@ module "vpc_cidr" {
 
 data "terraform_remote_state" "global" {
   backend = "s3"
-  config {
+  config = {
     bucket = "global-terraform.auderenow.io"
-    key = "policy/terraform.state"
+    key    = "policy/terraform.state"
     region = "us-west-2"
   }
 }
@@ -36,7 +36,8 @@ data "terraform_remote_state" "global" {
 terraform {
   backend "s3" {
     bucket = "flu-prod-terraform.auderenow.io"
-    key = "network/terraform.state"
+    key    = "network/terraform.state"
     region = "us-west-2"
   }
 }
+

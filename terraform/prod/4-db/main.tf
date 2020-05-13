@@ -6,16 +6,16 @@
 module "flu_db" {
   source = "../../modules/flu-db"
 
-  admins = "${var.admins}"
-  db_client_sg_id = "${data.terraform_remote_state.network.db_client_sg_id}"
-  db_nonpii_subnet_id = "${data.terraform_remote_state.network.db_nonpii_subnet_id}"
-  db_pii_subnet_id = "${data.terraform_remote_state.network.db_pii_subnet_id}"
-  db_server_sg_id = "${data.terraform_remote_state.network.db_server_sg_id}"
-  environment = "prod"
-  internet_egress_sg_id = "${data.terraform_remote_state.network.internet_egress_sg_id}"
-  log_archive_bucket_name = "${data.terraform_remote_state.global.database_log_archive_bucket_name}"
-  mode = "${var.mode}"
-  transient_subnet_id = "${data.terraform_remote_state.network.transient_subnet_id}"
+  admins                  = var.admins
+  db_client_sg_id         = data.terraform_remote_state.network.outputs.db_client_sg_id
+  db_nonpii_subnet_id     = data.terraform_remote_state.network.outputs.db_nonpii_subnet_id
+  db_pii_subnet_id        = data.terraform_remote_state.network.outputs.db_pii_subnet_id
+  db_server_sg_id         = data.terraform_remote_state.network.outputs.db_server_sg_id
+  environment             = "prod"
+  internet_egress_sg_id   = data.terraform_remote_state.network.outputs.internet_egress_sg_id
+  log_archive_bucket_name = data.terraform_remote_state.global.outputs.database_log_archive_bucket_name
+  mode                    = var.mode
+  transient_subnet_id     = data.terraform_remote_state.network.outputs.transient_subnet_id
 }
 
 module "ami" {
@@ -27,28 +27,26 @@ module "vpc_cidr" {
 }
 
 provider "aws" {
-  version = "~> 2.37"
   region = "us-west-2"
 }
 
 provider "template" {
-  version = "~> 1.0"
 }
 
 data "terraform_remote_state" "global" {
   backend = "s3"
-  config {
+  config = {
     bucket = "global-terraform.auderenow.io"
-    key = "policy/terraform.state"
+    key    = "policy/terraform.state"
     region = "us-west-2"
   }
 }
 
 data "terraform_remote_state" "network" {
   backend = "s3"
-  config {
+  config = {
     bucket = "flu-prod-terraform.auderenow.io"
-    key = "network/terraform.state"
+    key    = "network/terraform.state"
     region = "us-west-2"
   }
 }
@@ -56,7 +54,8 @@ data "terraform_remote_state" "network" {
 terraform {
   backend "s3" {
     bucket = "flu-prod-terraform.auderenow.io"
-    key = "db/terraform.state"
+    key    = "db/terraform.state"
     region = "us-west-2"
   }
 }
+

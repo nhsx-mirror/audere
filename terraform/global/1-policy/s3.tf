@@ -8,7 +8,7 @@
 
 resource "aws_cloudtrail" "cloudtrail-s3-events" {
   name                          = "cloudtrail-s3-events"
-  s3_bucket_name                = "${aws_s3_bucket.audere-cloudtrail-s3-logs.id}"
+  s3_bucket_name                = aws_s3_bucket.audere-cloudtrail-s3-logs.id
   include_global_service_events = true
   enable_logging                = true
   enable_log_file_validation    = true
@@ -23,7 +23,7 @@ resource "aws_cloudtrail" "cloudtrail-s3-events" {
     }
   }
 
-  depends_on = ["aws_s3_bucket_policy.cloudtrail-s3"]
+  depends_on = [aws_s3_bucket_policy.cloudtrail-s3]
 }
 
 resource "aws_s3_bucket" "audere-cloudtrail-s3-logs" {
@@ -62,8 +62,8 @@ data "aws_iam_policy_document" "allow-cloudtrail-s3" {
 }
 
 resource "aws_s3_bucket_policy" "cloudtrail-s3" {
-  bucket = "${aws_s3_bucket.audere-cloudtrail-s3-logs.id}"
-  policy = "${data.aws_iam_policy_document.allow-cloudtrail-s3.json}"
+  bucket = aws_s3_bucket.audere-cloudtrail-s3-logs.id
+  policy = data.aws_iam_policy_document.allow-cloudtrail-s3.json
 }
 
 // --------------------------------------------------------------------------------
@@ -81,22 +81,22 @@ resource "aws_s3_bucket_policy" "cloudtrail-s3" {
 // This will generate a link that is valid for $DAYS days.
 
 resource "aws_s3_bucket" "audere_share" {
-  bucket = "fileshare.auderenow.io"
+  bucket        = "fileshare.auderenow.io"
   force_destroy = true
 }
 
 resource "aws_s3_bucket_policy" "audere_share" {
-  bucket = "${aws_s3_bucket.audere_share.id}"
-  policy = "${data.aws_iam_policy_document.audere_share.json}"
+  bucket = aws_s3_bucket.audere_share.id
+  policy = data.aws_iam_policy_document.audere_share.json
 }
 
 data "aws_iam_policy_document" "audere_share" {
   statement {
-    sid = "ReadOnlyObjectAccessUnderPublic"
-    actions = ["s3:GetObject"]
+    sid       = "ReadOnlyObjectAccessUnderPublic"
+    actions   = ["s3:GetObject"]
     resources = ["arn:aws:s3:::fileshare.auderenow.io/public/*"]
     principals {
-      type = "*"
+      type        = "*"
       identifiers = ["*"]
     }
   }
@@ -111,33 +111,33 @@ resource "aws_s3_bucket" "database_log_archive" {
 }
 
 resource "aws_s3_bucket_policy" "database_log_archive" {
-  bucket = "${aws_s3_bucket.database_log_archive.id}"
-  policy = "${data.aws_iam_policy_document.allow_lambda_database_log_archiver.json}"
+  bucket = aws_s3_bucket.database_log_archive.id
+  policy = data.aws_iam_policy_document.allow_lambda_database_log_archiver.json
 }
 
 data "aws_iam_policy_document" "allow_lambda_database_log_archiver" {
   statement {
-    actions   = [
+    actions = [
       "s3:ListBucket",
       "s3:GetBucketAcl",
     ]
     resources = [
-      "${aws_s3_bucket.database_log_archive.arn}",
+      aws_s3_bucket.database_log_archive.arn,
       "${aws_s3_bucket.database_log_archive.arn}/*",
     ]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
   }
 
   statement {
-    actions = ["s3:PutObject"]
+    actions   = ["s3:PutObject"]
     resources = ["${aws_s3_bucket.database_log_archive.arn}/*"]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
 
@@ -151,3 +151,4 @@ data "aws_iam_policy_document" "allow_lambda_database_log_archiver" {
     }
   }
 }
+

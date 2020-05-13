@@ -58,3 +58,4 @@ variable "reporting_client_sg_id" {
 variable "ssm_parameters_key_arn" {
   description = "ARN of key needed to decrypt SSM parameters"
 }
+

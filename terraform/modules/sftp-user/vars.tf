@@ -22,3 +22,4 @@ variable "transfer_server_id" {
 variable "user_public_key" {
   description = "Public key for authenticating the provisioned user"
 }
+

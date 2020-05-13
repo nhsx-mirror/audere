@@ -5,10 +5,11 @@
 
 variable "bucket_name" {
   description = "Name of S3 bucket where we store DB logs"
-  type = "string"
+  type        = string
 }
 
 variable "db_name" {
   description = "Name/identifier of RDS instance"
-  type = "string"
+  type        = string
 }
+

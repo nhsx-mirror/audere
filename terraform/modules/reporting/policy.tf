@@ -8,9 +8,10 @@
 module "task_role" {
   source = "../ecs-task-role"
 
-  account = "${var.account}"
-  environment = "${var.environment}"
-  region = "${var.region}"
-  task_alias = "metabase"
-  ssm_parameters_key_arn = "${var.ssm_parameters_key_arn}"
+  account                = var.account
+  environment            = var.environment
+  region                 = var.region
+  task_alias             = "metabase"
+  ssm_parameters_key_arn = var.ssm_parameters_key_arn
 }
+
