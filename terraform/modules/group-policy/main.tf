@@ -65,7 +65,7 @@ resource "aws_iam_group" "committers" {
 }
 
 resource "aws_iam_group_policy_attachment" "committer_access" {
-  group = "${aws_iam_group.committers.name}"
+  group      = "${aws_iam_group.committers.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"
 }
 
@@ -77,7 +77,7 @@ resource "aws_iam_group" "code_readers" {
 }
 
 resource "aws_iam_group_policy_attachment" "code_reader_access" {
-  group = "${aws_iam_group.code_readers.name}"
+  group      = "${aws_iam_group.code_readers.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitReadOnly"
 }
 
@@ -99,13 +99,12 @@ resource "aws_iam_group_policy_attachment" "datascientist_access" {
 }
 
 resource "aws_iam_policy" "datascientist_access" {
-  name = "AudereDataScientistAccess"
+  name   = "AudereDataScientistAccess"
   policy = "${data.aws_iam_policy_document.datascientist_access.json}"
 }
 
 // https://docs.aws.amazon.com/sagemaker/latest/dg/sms-getting-started-step1.html
 data "aws_iam_policy_document" "datascientist_access" {
-
   statement {
     sid = "AllowIndividualUserToViewAndManageTheirOwnMFA"
 
@@ -133,11 +132,37 @@ data "aws_iam_policy_document" "datascientist_access" {
       "s3:PutObject",
       "s3:DeleteObject",
     ]
+
     resources = [
       "arn:aws:s3:::sagemaker.auderenow.io/*",
       "arn:aws:s3:::uw-photoset.auderenow.io/public/*",
       "arn:aws:s3:::cv-*.auderenow.io",
       "arn:aws:s3:::cv-*.auderenow.io/*",
+    ]
+
+    condition = {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["true"]
+    }
+
+    condition = {
+      test     = "${local.mfa_condition_test}"
+      variable = "${local.mfa_condition_variable}"
+      values   = ["${local.mfa_condition_value}"]
+    }
+  }
+
+  // s3 photoset access
+  statement {
+    actions = [
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::uw-photoset.auderenow.io/raw/*",
     ]
 
     condition = {
@@ -189,8 +214,9 @@ data "aws_iam_policy_document" "datascientist_access" {
       "ec2:CreateVpcEndpoint",
       "ec2:DescribeRouteTables",
       "fsx:DescribeFileSystem",
-      "elasticfilesystem:DescribeMountTargets"
+      "elasticfilesystem:DescribeMountTargets",
     ]
+
     resources = ["*"]
 
     condition = {
@@ -210,11 +236,12 @@ data "aws_iam_policy_document" "datascientist_access" {
     actions = [
       "codecommit:GitPull",
       "codecommit:GitPush",
-    ],
+    ]
+
     resources = [
       "arn:aws:codecommit:*:*:*sagemaker*",
       "arn:aws:codecommit:*:*:*SageMaker*",
-      "arn:aws:codecommit:*:*:*Sagemaker*"
+      "arn:aws:codecommit:*:*:*Sagemaker*",
     ]
 
     condition = {
@@ -448,7 +475,7 @@ data "aws_iam_policy_document" "infrastructurer_access" {
 
   // s3 full access
   statement {
-    actions = ["s3:*"]
+    actions   = ["s3:*"]
     resources = ["*"]
 
     condition = {
@@ -485,7 +512,7 @@ data "aws_iam_policy_document" "infrastructurer_access" {
   statement {
     actions = [
       "iam:Get*",
-      "iam:List*"
+      "iam:List*",
     ]
 
     resources = [
@@ -582,7 +609,7 @@ data "aws_iam_policy_document" "infrastructurer_access" {
       "swf:ListActionTemplates",
       "swf:RegisterAction",
       "swf:RegisterDomain",
-      "swf:UpdateAction"
+      "swf:UpdateAction",
     ]
 
     resources = ["*"]
@@ -598,7 +625,7 @@ data "aws_iam_policy_document" "infrastructurer_access" {
   statement {
     not_actions = [
       "lambda:AddPermission",
-      "lambda:PutFunctionConcurrency"
+      "lambda:PutFunctionConcurrency",
     ]
 
     resources = ["arn:aws:lambda:*:*:function:flu*"]
@@ -901,26 +928,16 @@ data "aws_iam_policy_document" "security_audit" {
 // --------------------------------------------------------------------------------
 // Users with managed AWS privileges
 
-data "aws_iam_user" "akr" {
-  user_name = "akr"
-}
-
 data "aws_iam_user" "billy" {
   user_name = "billy"
 }
 
-data "aws_iam_user" "jay" {
-  user_name = "jay"
-}
-
 data "aws_iam_user" "jenny" {
   user_name = "jenny"
-
 }
 
 data "aws_iam_user" "lessw" {
   user_name = "lessw"
-
 }
 
 data "aws_iam_user" "mathewsb" {
@@ -963,7 +980,6 @@ resource "aws_iam_group_membership" "administrators" {
   group = "${aws_iam_group.administrators.name}"
 
   users = [
-    "akr",
     "billy",
     "jenny",
     "mathewsb",
@@ -971,18 +987,16 @@ resource "aws_iam_group_membership" "administrators" {
     "philip",
     "ram",
     "sam",
-    "terri"
+    "terri",
   ]
 }
 
 resource "aws_iam_group_membership" "committers" {
-  name = "Committers"
+  name  = "Committers"
   group = "${aws_iam_group.committers.name}"
 
   users = [
-    "akr",
     "billy",
-    "jay",
     "jenny",
     "lessw",
     "mathewsb",
@@ -997,11 +1011,11 @@ resource "aws_iam_group_membership" "committers" {
 }
 
 resource "aws_iam_group_membership" "code_readers" {
-  name = "CodeReaders"
+  name  = "CodeReaders"
   group = "${aws_iam_group.code_readers.name}"
 
   users = [
-    "audere-circleci"
+    "audere-circleci",
   ]
 }
 
@@ -1023,7 +1037,6 @@ resource "aws_iam_group_membership" "infrastructurers" {
   group = "${aws_iam_group.infrastructurers.name}"
 
   users = [
-    "akr",
     "billy",
     "jenny",
     "mathewsb",
@@ -1038,6 +1051,5 @@ resource "aws_iam_group_membership" "securers" {
   name  = "Securers"
   group = "${aws_iam_group.securers.name}"
 
-  users = [
-  ]
+  users = []
 }
