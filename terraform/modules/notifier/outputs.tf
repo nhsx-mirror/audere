@@ -4,5 +4,6 @@
 // can be found in the LICENSE file distributed with this file.
 
 output "infra_alerts_sns_topic_arn" {
-  value = "${aws_sns_topic.infra_alerts.arn}"
+  value = aws_sns_topic.infra_alerts.arn
 }
+

@@ -9,15 +9,15 @@
 # }
 
 resource "aws_iam_role" "log_archiver" {
-  name = "${local.base_name}"
-  assume_role_policy = "${data.aws_iam_policy_document.log_archiver_role_policy.json}"
+  name               = local.base_name
+  assume_role_policy = data.aws_iam_policy_document.log_archiver_role_policy.json
 }
 
 data "aws_iam_policy_document" "log_archiver_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
   }
@@ -26,48 +26,48 @@ data "aws_iam_policy_document" "log_archiver_role_policy" {
 // RDS Log Access
 
 resource "aws_iam_role_policy_attachment" "rds_logs_read" {
-  role = "${aws_iam_role.log_archiver.name}"
-  policy_arn = "${aws_iam_policy.rds_logs_read.arn}"
+  role       = aws_iam_role.log_archiver.name
+  policy_arn = aws_iam_policy.rds_logs_read.arn
 }
 
 resource "aws_iam_policy" "rds_logs_read" {
-  name = "${local.base_name}-rds-logs-read"
-  policy = "${data.aws_iam_policy_document.rds_logs_read.json}"
+  name   = "${local.base_name}-rds-logs-read"
+  policy = data.aws_iam_policy_document.rds_logs_read.json
 }
 
 data "aws_iam_policy_document" "rds_logs_read" {
-  statement = {
-    actions   = [
+  statement {
+    actions = [
       "rds:DescribeDBLogFiles",
       "rds:DownloadDBLogFilePortion",
     ]
-    resources = ["${data.aws_db_instance.db.db_instance_arn}"]
+    resources = [data.aws_db_instance.db.db_instance_arn]
   }
 }
 
 // S3 Access
 
 resource "aws_iam_role_policy_attachment" "s3_write" {
-  role = "${aws_iam_role.log_archiver.name}"
-  policy_arn = "${aws_iam_policy.s3_write.arn}"
+  role       = aws_iam_role.log_archiver.name
+  policy_arn = aws_iam_policy.s3_write.arn
 }
 
 resource "aws_iam_policy" "s3_write" {
-  name = "${local.base_name}-s3-write"
-  policy = "${data.aws_iam_policy_document.s3_write.json}"
+  name   = "${local.base_name}-s3-write"
+  policy = data.aws_iam_policy_document.s3_write.json
 }
 
 data "aws_iam_policy_document" "s3_write" {
-  statement = {
-    actions   = [
+  statement {
+    actions = [
       "s3:ListBucket",
       "s3:GetBucketAcl",
     ]
-    resources = ["${data.aws_s3_bucket.archive.arn}"]
+    resources = [data.aws_s3_bucket.archive.arn]
   }
 
-  statement = {
-    actions   = [
+  statement {
+    actions = [
       "s3:PutObject",
     ]
     resources = ["${data.aws_s3_bucket.archive.arn}/*"]
@@ -77,13 +77,13 @@ data "aws_iam_policy_document" "s3_write" {
 // CloudTrail logging
 
 resource "aws_iam_role_policy_attachment" "lambda_cloudtrail" {
-  role = "${aws_iam_role.log_archiver.name}"
-  policy_arn = "${aws_iam_policy.lambda_cloudtrail.arn}"
+  role       = aws_iam_role.log_archiver.name
+  policy_arn = aws_iam_policy.lambda_cloudtrail.arn
 }
 
 resource "aws_iam_policy" "lambda_cloudtrail" {
-  name = "${local.base_name}-lambda-cloudtrail"
-  policy = "${data.aws_iam_policy_document.lambda_cloudtrail.json}"
+  name   = "${local.base_name}-lambda-cloudtrail"
+  policy = data.aws_iam_policy_document.lambda_cloudtrail.json
 }
 
 data "aws_iam_policy_document" "lambda_cloudtrail" {
@@ -103,5 +103,6 @@ data "aws_iam_policy_document" "lambda_cloudtrail" {
 // Data
 
 data "aws_s3_bucket" "archive" {
-  bucket = "${var.bucket_name}"
+  bucket = var.bucket_name
 }
+

@@ -4,12 +4,13 @@
 // can be found in the LICENSE file distributed with this file.
 
 resource "aws_db_subnet_group" "fludb" {
-  name = "${local.base_name}"
+  name = local.base_name
   subnet_ids = [
-    "${var.db_pii_subnet_id}",
-    "${var.db_nonpii_subnet_id}",
+    var.db_pii_subnet_id,
+    var.db_nonpii_subnet_id,
   ]
   tags = {
-    Name = "${local.base_name}"
+    Name = local.base_name
   }
 }
+

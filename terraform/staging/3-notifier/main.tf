@@ -6,28 +6,28 @@
 module "flu_notifier" {
   source = "../../modules/notifier"
 
-  environment = "staging"
-  ssm_parameters_key_arn = "${data.terraform_remote_state.global.ssm_parameters_key_arn}"
+  environment            = "staging"
+  ssm_parameters_key_arn = data.terraform_remote_state.global.outputs.ssm_parameters_key_arn
 }
 
 data "terraform_remote_state" "global" {
   backend = "s3"
-  config {
+  config = {
     bucket = "global-terraform.auderenow.io"
-    key = "policy/terraform.state"
+    key    = "policy/terraform.state"
     region = "us-west-2"
   }
 }
 
 provider "aws" {
-  version = "~> 2.43"
-  region = "us-west-2"
+  version = "~> 2.61"
+  region  = "us-west-2"
 }
 
 terraform {
   backend "s3" {
     bucket = "flu-staging-terraform.auderenow.io"
-    key = "notifier/terraform.state"
+    key    = "notifier/terraform.state"
     region = "us-west-2"
   }
 }

@@ -5,5 +5,6 @@
 
 variable "devs" {
   description = "Userids of developers who should have a dev machine allocated"
-  type = "list"
+  type        = list(string)
 }
+

@@ -7,25 +7,25 @@ data "aws_iam_policy_document" "assume_ec2_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "ecs_role" {
-  name = "${local.base_name}-ecs"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_ec2_role_policy.json}"
+  name               = "${local.base_name}-ecs"
+  assume_role_policy = data.aws_iam_policy_document.assume_ec2_role_policy.json
 }
 
 resource "aws_iam_instance_profile" "ecs" {
   name = "${local.base_name}-ecs"
-  role = "${aws_iam_role.ecs_role.name}"
+  role = aws_iam_role.ecs_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_attachment" {
-   role = "${aws_iam_role.ecs_role.name}"
-   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  role       = aws_iam_role.ecs_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
 data "aws_iam_policy_document" "ecs_cloudwatch_policy" {
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "ecs_cloudwatch_policy" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "logs:DescribeLogStreams"
+      "logs:DescribeLogStreams",
     ]
 
     resources = ["arn:aws:logs:*:*:*"]
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "ecs_cloudwatch_policy" {
       "cloudwatch:ListMetrics",
       "cloudwatch:PutMetricData",
       "cloudwatch:PutEvents",
-      "ec2:DescribeTags"
+      "ec2:DescribeTags",
     ]
 
     resources = ["*"]
@@ -53,12 +53,13 @@ data "aws_iam_policy_document" "ecs_cloudwatch_policy" {
 }
 
 resource "aws_iam_policy" "ecs_cloudwatch" {
-  name = "${local.base_name}-ecs-cloudwatch"
-  policy = "${data.aws_iam_policy_document.ecs_cloudwatch_policy.json}"
+  name   = "${local.base_name}-ecs-cloudwatch"
+  policy = data.aws_iam_policy_document.ecs_cloudwatch_policy.json
 }
 
 resource "aws_iam_policy_attachment" "ecs_cloudwatch_attachment" {
-  name = "${local.base_name}-ecs-cloudwatch"
-  roles = ["${aws_iam_role.ecs_role.name}"]
-  policy_arn = "${aws_iam_policy.ecs_cloudwatch.arn}"
+  name       = "${local.base_name}-ecs-cloudwatch"
+  roles      = [aws_iam_role.ecs_role.name]
+  policy_arn = aws_iam_policy.ecs_cloudwatch.arn
 }
+

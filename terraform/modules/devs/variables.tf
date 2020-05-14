@@ -5,10 +5,11 @@
 
 variable "userids" {
   description = "List of developer userids to include"
-  type = "list"
+  type        = list(string)
 }
 
 variable "keydir" {
   description = "Path to directory containing ssh public keys, each of the form: '$USERID.pub'"
-  default = ""
+  default     = ""
 }
+

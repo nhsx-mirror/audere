@@ -4,14 +4,14 @@
 // can be found in the LICENSE file distributed with this file.
 
 provider "aws" {
-  version = "~> 1.50"
+  version = "~> 2.61"
   region  = "us-west-2"
 }
 
 terraform {
   backend "s3" {
     bucket = "global-terraform.auderenow.io"
-    key = "policy/terraform.state"
+    key    = "policy/terraform.state"
     region = "us-west-2"
   }
 }
@@ -40,10 +40,10 @@ resource "aws_default_vpc" "default" {
 }
 
 resource "aws_flow_log" "default_vpc_flow_log" {
-  iam_role_arn    = "${aws_iam_role.vpc_flow_log_role.arn}"
-  log_destination = "${aws_cloudwatch_log_group.vpc_flow_log.arn}"
+  iam_role_arn    = aws_iam_role.vpc_flow_log_role.arn
+  log_destination = aws_cloudwatch_log_group.vpc_flow_log.arn
   traffic_type    = "ALL"
-  vpc_id          = "${aws_default_vpc.default.id}"
+  vpc_id          = aws_default_vpc.default.id
 }
 
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
@@ -64,7 +64,7 @@ data "aws_iam_policy_document" "vpc_flow_log_role_policy" {
 resource "aws_iam_role" "vpc_flow_log_role" {
   name = "VPCFlowLogRole"
 
-  assume_role_policy = "${data.aws_iam_policy_document.vpc_flow_log_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.vpc_flow_log_role_policy.json
 }
 
 data "aws_iam_policy_document" "logs_policy" {
@@ -83,9 +83,9 @@ data "aws_iam_policy_document" "logs_policy" {
 
 resource "aws_iam_role_policy" "logs_role_policy" {
   name = "LogsRolePolicy"
-  role = "${aws_iam_role.vpc_flow_log_role.id}"
+  role = aws_iam_role.vpc_flow_log_role.id
 
-  policy = "${data.aws_iam_policy_document.logs_policy.json}"
+  policy = data.aws_iam_policy_document.logs_policy.json
 }
 
 // --------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ resource "aws_iam_role_policy" "logs_role_policy" {
 
 resource "aws_iam_service_linked_role" "ecs_service_linked_role" {
   aws_service_name = "ecs.amazonaws.com"
-  description = "Role to enable Amazon ECS service."
+  description      = "Role to enable Amazon ECS service."
 }
 
 // --------------------------------------------------------------------------------
@@ -118,8 +118,8 @@ resource "aws_kms_key" "ssm_parameters" {
 }
 
 resource "aws_kms_alias" "ssm_parameters" {
-  name = "alias/ssm-parameters"
-  target_key_id = "${aws_kms_key.ssm_parameters.key_id}"
+  name          = "alias/ssm-parameters"
+  target_key_id = aws_kms_key.ssm_parameters.key_id
 }
 
 // --------------------------------------------------------------------------------
@@ -130,19 +130,19 @@ resource "aws_iam_user" "ecr_push" {
 }
 
 resource "aws_iam_user_policy_attachment" "ecs_manage" {
-  user       = "${aws_iam_user.ecr_push.name}"
+  user       = aws_iam_user.ecr_push.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceFullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "ecr_push" {
-  user       = "${aws_iam_user.ecr_push.name}"
+  user       = aws_iam_user.ecr_push.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
 }
 
 data "aws_iam_policy_document" "create_ecr_repository_document" {
   statement {
     actions = [
-      "ecr:CreateRepository"
+      "ecr:CreateRepository",
     ]
 
     resources = ["*"]
@@ -151,12 +151,12 @@ data "aws_iam_policy_document" "create_ecr_repository_document" {
 
 resource "aws_iam_policy" "create_ecr_repository_policy" {
   name   = "ecr-push-create-repo"
-  policy = "${data.aws_iam_policy_document.create_ecr_repository_document.json}"
+  policy = data.aws_iam_policy_document.create_ecr_repository_document.json
 }
 
 resource "aws_iam_user_policy_attachment" "create_ecr_repository_attachment" {
-  user       = "${aws_iam_user.ecr_push.name}"
-  policy_arn = "${aws_iam_policy.create_ecr_repository_policy.arn}"
+  user       = aws_iam_user.ecr_push.name
+  policy_arn = aws_iam_policy.create_ecr_repository_policy.arn
 }
 
 resource "aws_ecr_repository" "fluapi_ecr_repo" {
@@ -164,7 +164,7 @@ resource "aws_ecr_repository" "fluapi_ecr_repo" {
 }
 
 resource "aws_ecr_lifecycle_policy" "fluapi_ecr_repo_policy" {
-  repository = "${aws_ecr_repository.fluapi_ecr_repo.name}"
+  repository = aws_ecr_repository.fluapi_ecr_repo.name
 
   policy = <<EOF
 {
@@ -184,4 +184,5 @@ resource "aws_ecr_lifecycle_policy" "fluapi_ecr_repo_policy" {
     ]
 }
 EOF
+
 }

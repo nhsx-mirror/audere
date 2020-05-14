@@ -29,7 +29,7 @@
 //   terraform apply
 
 variable "admins" {
-  type = "list"
+  type = list(string)
 }
 
 variable "availability_zone" {
@@ -38,22 +38,22 @@ variable "availability_zone" {
 
 variable "db_client_sg_id" {
   description = "Security group to open database client traffic"
-  type = "string"
+  type        = string
 }
 
 variable "db_nonpii_subnet_id" {
   description = "Subnet in which non-PII databases should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "db_pii_subnet_id" {
   description = "Subnet in which PII databases should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "db_server_sg_id" {
   description = "Security group to open database server traffic"
-  type = "string"
+  type        = string
 }
 
 variable "db_setup_password_filename" {
@@ -62,7 +62,7 @@ variable "db_setup_password_filename" {
 
 variable "environment" {
   description = "One of 'staging' or 'prod'"
-  type = "string"
+  type        = string
 }
 
 variable "github_tar_bz2_base64_filename" {
@@ -71,17 +71,17 @@ variable "github_tar_bz2_base64_filename" {
 
 variable "internet_egress_sg_id" {
   description = "Security group to open internet egress"
-  type = "string"
+  type        = string
 }
 
 variable "log_archive_bucket_name" {
   description = "Name of S3 bucket where db logs are archived"
-  type = "string"
+  type        = string
 }
 
 variable "mode" {
   description = "One of 'provision0', 'provision1', 'add-admin', or 'run'"
-  default = "run"
+  default     = "run"
 }
 
 variable "pii_availability_zone" {
@@ -94,9 +94,10 @@ variable "random_seed_filename" {
 
 variable "transient_subnet_id" {
   description = "Subnet in which the transient resources, such as Lambdas and bootstrap/provisioning, should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "vpc_dhparam_filename" {
   default = "../../../local/flu/creds/vpc.dhparam"
 }
+

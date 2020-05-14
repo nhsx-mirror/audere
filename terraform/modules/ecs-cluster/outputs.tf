@@ -4,9 +4,10 @@
 // can be found in the LICENSE file distributed with this file.
 
 output "id" {
-  value = "${aws_ecs_cluster.cluster.id}"
+  value = aws_ecs_cluster.cluster.id
 }
 
 output "name" {
-  value = "${aws_ecs_cluster.cluster.name}"
+  value = aws_ecs_cluster.cluster.name
 }
+

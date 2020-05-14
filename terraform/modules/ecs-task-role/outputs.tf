@@ -4,5 +4,6 @@
 // can be found in the LICENSE file distributed with this file.
 
 output "arn" {
-  value = "${aws_iam_role.ecs_task_execution_role.arn}"
+  value = aws_iam_role.ecs_task_execution_role.arn
 }
+

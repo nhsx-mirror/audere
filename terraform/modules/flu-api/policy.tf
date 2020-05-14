@@ -5,33 +5,33 @@
 
 resource "aws_iam_instance_profile" "flu_api" {
   name = "${local.base_name}-profile"
-  role = "${aws_iam_role.flu_api_role.name}"
+  role = aws_iam_role.flu_api_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "flu_api_send_email" {
-  role = "${aws_iam_role.flu_api_role.name}"
-  policy_arn = "${aws_iam_policy.ses_send_email.arn}"
+  role       = aws_iam_role.flu_api_role.name
+  policy_arn = aws_iam_policy.ses_send_email.arn
 }
 
 resource "aws_iam_role" "flu_api_role" {
-  name = "${local.base_name}-role"
-  assume_role_policy = "${data.aws_iam_policy_document.flu_ec2_role_policy.json}"
+  name               = "${local.base_name}-role"
+  assume_role_policy = data.aws_iam_policy_document.flu_ec2_role_policy.json
 }
 
 data "aws_iam_policy_document" "flu_ec2_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role_policy" "flu_api_cloudwatch_policy" {
-  name = "${local.base_name}-cloudwatch-policy"
-  role = "${aws_iam_role.flu_api_role.id}"
-  policy = "${data.aws_iam_policy_document.flu_api_cloudwatch_policy.json}"
+  name   = "${local.base_name}-cloudwatch-policy"
+  role   = aws_iam_role.flu_api_role.id
+  policy = data.aws_iam_policy_document.flu_api_cloudwatch_policy.json
 }
 
 data "aws_iam_policy_document" "flu_api_cloudwatch_policy" {
@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "flu_api_cloudwatch_policy" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "logs:DescribeLogStreams"
+      "logs:DescribeLogStreams",
     ]
 
     resources = ["arn:aws:logs:*:*:*"]
@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "flu_api_cloudwatch_policy" {
       "cloudwatch:ListMetrics",
       "cloudwatch:PutMetricData",
       "cloudwatch:PutEvents",
-      "ec2:DescribeTags"
+      "ec2:DescribeTags",
     ]
 
     resources = ["*"]
@@ -59,56 +59,56 @@ data "aws_iam_policy_document" "flu_api_cloudwatch_policy" {
 }
 
 resource "aws_s3_bucket_policy" "evidation_s3_policy" {
-  bucket = "${aws_s3_bucket.evidation_reports_bucket.id}"
-  policy = "${data.aws_iam_policy_document.evidation_s3_policy.json}"
+  bucket = aws_s3_bucket.evidation_reports_bucket.id
+  policy = data.aws_iam_policy_document.evidation_s3_policy.json
 }
 
 data "aws_iam_policy_document" "evidation_s3_policy" {
   statement {
     actions = [
       "s3:GetBucketLocation",
-      "s3:ListBucket"
+      "s3:ListBucket",
     ]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${local.evidation_account}:root"]
     }
 
     resources = [
-      "${aws_s3_bucket.evidation_reports_bucket.arn}"
+      aws_s3_bucket.evidation_reports_bucket.arn,
     ]
   }
 
   statement {
     actions = [
       "s3:DeleteObject",
-      "s3:GetObject"
+      "s3:GetObject",
     ]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${local.evidation_account}:root"]
     }
 
     resources = [
-      "${aws_s3_bucket.evidation_reports_bucket.arn}/*"
+      "${aws_s3_bucket.evidation_reports_bucket.arn}/*",
     ]
   }
 
   statement {
     actions = [
       "s3:PutObject",
-      "s3:PutObjectAcl"
+      "s3:PutObjectAcl",
     ]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${local.evidation_account}:root"]
     }
 
     resources = [
-      "${aws_s3_bucket.evidation_reports_bucket.arn}/*"
+      "${aws_s3_bucket.evidation_reports_bucket.arn}/*",
     ]
 
     condition {
@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "evidation_s3_kms_policy" {
   statement {
     actions = ["kms:*"]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::475613123583:root"]
     }
@@ -137,10 +137,10 @@ data "aws_iam_policy_document" "evidation_s3_kms_policy" {
       "kms:Decrypt",
       "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
     ]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${local.evidation_account}:root"]
     }
@@ -150,8 +150,8 @@ data "aws_iam_policy_document" "evidation_s3_kms_policy" {
 }
 
 resource "aws_iam_policy" "flu_api_s3_policy" {
-  name = "${local.base_name}-s3-policy"
-  policy = "${data.aws_iam_policy_document.flu_api_s3_policy.json}"
+  name   = "${local.base_name}-s3-policy"
+  policy = data.aws_iam_policy_document.flu_api_s3_policy.json
 }
 
 data "aws_iam_policy_document" "flu_api_s3_policy" {
@@ -159,7 +159,7 @@ data "aws_iam_policy_document" "flu_api_s3_policy" {
     actions = [
       "s3:PutObject",
       "s3:DeleteObject",
-      "s3:GetObject"
+      "s3:GetObject",
     ]
 
     resources = [
@@ -168,22 +168,22 @@ data "aws_iam_policy_document" "flu_api_s3_policy" {
       "${var.audere_share_bucket}/*",
       "${var.chills_virena_bucket}/*",
       "${var.cough_aspren_bucket}/*",
-      "${var.cough_qualtrics_bucket}/*"
+      "${var.cough_qualtrics_bucket}/*",
     ]
   }
 
   statement {
     actions = [
-      "s3:ListBucket"
+      "s3:ListBucket",
     ]
 
     resources = [
-      "${aws_s3_bucket.evidation_reports_bucket.arn}",
-      "${aws_s3_bucket.flu_api_reports_bucket.arn}",
-      "${var.audere_share_bucket}",
-      "${var.chills_virena_bucket}",
-      "${var.cough_aspren_bucket}",
-      "${var.cough_qualtrics_bucket}"
+      aws_s3_bucket.evidation_reports_bucket.arn,
+      aws_s3_bucket.flu_api_reports_bucket.arn,
+      var.audere_share_bucket,
+      var.chills_virena_bucket,
+      var.cough_aspren_bucket,
+      var.cough_qualtrics_bucket,
     ]
   }
 }
@@ -195,26 +195,26 @@ data "aws_iam_policy_document" "flu_api_evidation_kms_policy" {
       "kms:Decrypt",
       "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
     ]
 
-    resources = ["${aws_kms_key.evidation_s3.arn}"]
+    resources = [aws_kms_key.evidation_s3.arn]
   }
 }
 
 resource "aws_iam_policy" "flu_api_evidation_kms_policy" {
-  name = "${local.base_name}-evidation-kms"
-  policy = "${data.aws_iam_policy_document.flu_api_evidation_kms_policy.json}"
+  name   = "${local.base_name}-evidation-kms"
+  policy = data.aws_iam_policy_document.flu_api_evidation_kms_policy.json
 }
 
 resource "aws_iam_policy" "ses_send_email" {
-  name = "${local.base_name}-ses-send-email"
-  policy = "${data.aws_iam_policy_document.ses_send_email.json}"
+  name   = "${local.base_name}-ses-send-email"
+  policy = data.aws_iam_policy_document.ses_send_email.json
 }
 
 data "aws_iam_policy_document" "ses_send_email" {
-  statement = {
-    actions = ["ses:SendEmail", "ses:SendRawEmail"]
+  statement {
+    actions   = ["ses:SendEmail", "ses:SendRawEmail"]
     resources = ["*"]
   }
 }
@@ -222,15 +222,16 @@ data "aws_iam_policy_document" "ses_send_email" {
 module "task_role" {
   source = "../ecs-task-role"
 
-  account = "${var.account}"
-  environment = "${var.environment}"
+  account     = var.account
+  environment = var.environment
   policies = [
-    "${aws_iam_policy.flu_api_evidation_kms_policy.arn}",
-    "${aws_iam_policy.flu_api_s3_policy.arn}",
-    "${aws_iam_policy.ses_send_email.arn}"
+    aws_iam_policy.flu_api_evidation_kms_policy.arn,
+    aws_iam_policy.flu_api_s3_policy.arn,
+    aws_iam_policy.ses_send_email.arn,
   ]
-  policy_count = 3
-  region = "${var.region}"
-  task_alias = "fluapi"
-  ssm_parameters_key_arn = "${var.ssm_parameters_key_arn}"
+  policy_count           = 3
+  region                 = var.region
+  task_alias             = "fluapi"
+  ssm_parameters_key_arn = var.ssm_parameters_key_arn
 }
+

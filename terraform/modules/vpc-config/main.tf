@@ -16,7 +16,7 @@ resource "aws_config_config_rule" "restricted-ssh" {
     source_identifier = "INCOMING_SSH_DISABLED"
   }
 
-  depends_on = ["aws_config_configuration_recorder.main"]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "ec2-volume-inuse-check" {
@@ -28,7 +28,7 @@ resource "aws_config_config_rule" "ec2-volume-inuse-check" {
     source_identifier = "EC2_VOLUME_INUSE_CHECK"
   }
 
-  depends_on = ["aws_config_configuration_recorder.main"]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "instances-in-vpc" {
@@ -41,8 +41,8 @@ resource "aws_config_config_rule" "instances-in-vpc" {
   }
 
   depends_on = [
-    "aws_config_configuration_recorder.main",
-    "aws_config_delivery_channel.main",
+    aws_config_configuration_recorder.main,
+    aws_config_delivery_channel.main,
   ]
 }
 
@@ -55,9 +55,7 @@ resource "aws_config_config_rule" "eip-attached" {
     source_identifier = "EIP_ATTACHED"
   }
 
-  depends_on = [
-    "aws_config_configuration_recorder.main",
-  ]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "vpc-default-security-group-closed" {
@@ -69,9 +67,7 @@ resource "aws_config_config_rule" "vpc-default-security-group-closed" {
     source_identifier = "VPC_DEFAULT_SECURITY_GROUP_CLOSED"
   }
 
-  depends_on = [
-    "aws_config_configuration_recorder.main",
-  ]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "vpc-flow-logs-enabled" {
@@ -83,9 +79,7 @@ resource "aws_config_config_rule" "vpc-flow-logs-enabled" {
     source_identifier = "VPC_FLOW_LOGS_ENABLED"
   }
 
-  depends_on = [
-    "aws_config_configuration_recorder.main",
-  ]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "encrypted-volumes" {
@@ -97,9 +91,7 @@ resource "aws_config_config_rule" "encrypted-volumes" {
     source_identifier = "ENCRYPTED_VOLUMES"
   }
 
-  depends_on = [
-    "aws_config_configuration_recorder.main",
-  ]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "rds-storage-encrypted" {
@@ -111,9 +103,7 @@ resource "aws_config_config_rule" "rds-storage-encrypted" {
     source_identifier = "RDS_STORAGE_ENCRYPTED"
   }
 
-  depends_on = [
-    "aws_config_configuration_recorder.main",
-  ]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "s3-bucket-public-read-prohibited" {
@@ -125,9 +115,7 @@ resource "aws_config_config_rule" "s3-bucket-public-read-prohibited" {
     source_identifier = "S3_BUCKET_PUBLIC_READ_PROHIBITED"
   }
 
-  depends_on = [
-    "aws_config_configuration_recorder.main",
-  ]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 // Manage Tools
@@ -140,11 +128,11 @@ resource "aws_config_config_rule" "cloudtrail-enabled" {
     source_identifier = "CLOUD_TRAIL_ENABLED"
   }
 
-  maximum_execution_frequency = "${var.config_max_execution_frequency}"
+  maximum_execution_frequency = var.config_max_execution_frequency
 
   depends_on = [
-    "aws_config_configuration_recorder.main",
-    "aws_config_delivery_channel.main",
+    aws_config_configuration_recorder.main,
+    aws_config_delivery_channel.main,
   ]
 }
 
@@ -158,63 +146,65 @@ resource "aws_config_config_rule" "iam-user-no-policies-check" {
     source_identifier = "IAM_USER_NO_POLICIES_CHECK"
   }
 
-  depends_on = ["aws_config_configuration_recorder.main"]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 data "template_file" "aws_config_iam_password_policy" {
-  template = "${file("${path.module}/config-policies/iam-password-policy.tpl")}"
+  template = file("${path.module}/config-policies/iam-password-policy.tpl")
 
   vars = {
     // terraform will interpolate boolean as 0/1 and the config parameters expect "true" or "false"
-    password_require_uppercase = "${var.password_require_uppercase ? "true" : "false"}"
-    password_require_lowercase = "${var.password_require_lowercase ? "true" : "false"}"
-    password_require_symbols   = "${var.password_require_symbols ? "true" : "false"}"
-    password_require_numbers   = "${var.password_require_numbers ? "true" : "false"}"
-    password_min_length        = "${var.password_min_length}"
-    password_reuse_prevention  = "${var.password_reuse_prevention}"
-    password_max_age           = "${var.password_max_age}"
+    password_require_uppercase = var.password_require_uppercase ? "true" : "false"
+    password_require_lowercase = var.password_require_lowercase ? "true" : "false"
+    password_require_symbols   = var.password_require_symbols ? "true" : "false"
+    password_require_numbers   = var.password_require_numbers ? "true" : "false"
+    password_min_length        = var.password_min_length
+    password_reuse_prevention  = var.password_reuse_prevention
+    password_max_age           = var.password_max_age
   }
 }
 
 resource "aws_config_config_rule" "iam-password-policy" {
   name             = "iam-password-policy"
   description      = "Ensure the account password policy for IAM users meets the specified requirements"
-  input_parameters = "${data.template_file.aws_config_iam_password_policy.rendered}"
+  input_parameters = data.template_file.aws_config_iam_password_policy.rendered
 
   source {
     owner             = "AWS"
     source_identifier = "IAM_PASSWORD_POLICY"
   }
 
-  maximum_execution_frequency = "${var.config_max_execution_frequency}"
+  maximum_execution_frequency = var.config_max_execution_frequency
 
   depends_on = [
-    "aws_config_configuration_recorder.main",
-    "aws_config_delivery_channel.main",
+    aws_config_configuration_recorder.main,
+    aws_config_delivery_channel.main,
   ]
 }
 
 data "template_file" "aws_config_acm_certificate_expiration" {
-  template = "${file("${path.module}/config-policies/acm-certificate-expiration.tpl")}"
+  template = file(
+    "${path.module}/config-policies/acm-certificate-expiration.tpl",
+  )
 
   vars = {
-    acm_days_to_expiration = "${var.acm_days_to_expiration}"
+    acm_days_to_expiration = var.acm_days_to_expiration
   }
 }
 
 resource "aws_config_config_rule" "acm-certificate-expiration-check" {
   name             = "acm-certificate-expiration-check"
   description      = "Ensures ACM Certificates in your account are marked for expiration within the specified number of days"
-  input_parameters = "${data.template_file.aws_config_acm_certificate_expiration.rendered}"
+  input_parameters = data.template_file.aws_config_acm_certificate_expiration.rendered
 
   source {
     owner             = "AWS"
     source_identifier = "ACM_CERTIFICATE_EXPIRATION_CHECK"
   }
 
-  maximum_execution_frequency = "${var.config_max_execution_frequency}"
+  maximum_execution_frequency = var.config_max_execution_frequency
 
-  depends_on = ["aws_config_configuration_recorder.main"]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_config_rule" "root-account-mfa-enabled" {
@@ -226,11 +216,11 @@ resource "aws_config_config_rule" "root-account-mfa-enabled" {
     source_identifier = "ROOT_ACCOUNT_MFA_ENABLED"
   }
 
-  maximum_execution_frequency = "${var.config_max_execution_frequency}"
+  maximum_execution_frequency = var.config_max_execution_frequency
 
   depends_on = [
-    "aws_config_configuration_recorder.main",
-    "aws_config_delivery_channel.main",
+    aws_config_configuration_recorder.main,
+    aws_config_delivery_channel.main,
   ]
 }
 
@@ -238,7 +228,7 @@ resource "aws_config_config_rule" "root-account-mfa-enabled" {
 resource "aws_config_configuration_recorder_status" "main" {
   name       = "aws-config"
   is_enabled = true
-  depends_on = ["aws_config_delivery_channel.main"]
+  depends_on = [aws_config_delivery_channel.main]
 }
 
 resource "aws_s3_bucket" "config_logs_bucket" {
@@ -285,28 +275,28 @@ data "aws_iam_policy_document" "aws_config_s3_policy" {
 }
 
 resource "aws_s3_bucket_policy" "config_logs" {
-  bucket = "${aws_s3_bucket.config_logs_bucket.id}"
+  bucket = aws_s3_bucket.config_logs_bucket.id
 
-  policy = "${data.aws_iam_policy_document.aws_config_s3_policy.json}"
+  policy = data.aws_iam_policy_document.aws_config_s3_policy.json
 }
 
 resource "aws_config_delivery_channel" "main" {
   name           = "aws-config"
-  s3_bucket_name = "${aws_s3_bucket.config_logs_bucket.bucket}"
+  s3_bucket_name = aws_s3_bucket.config_logs_bucket.bucket
   s3_key_prefix  = "audere"
 
-  snapshot_delivery_properties = {
-    delivery_frequency = "${var.config_delivery_frequency}"
+  snapshot_delivery_properties {
+    delivery_frequency = var.config_delivery_frequency
   }
 
-  depends_on = ["aws_config_configuration_recorder.main"]
+  depends_on = [aws_config_configuration_recorder.main]
 }
 
 resource "aws_config_configuration_recorder" "main" {
   name     = "aws-config"
-  role_arn = "${aws_iam_service_linked_role.aws_config.arn}"
+  role_arn = aws_iam_service_linked_role.aws_config.arn
 
-  recording_group = {
+  recording_group {
     all_supported                 = true
     include_global_resource_types = true
   }
@@ -315,3 +305,4 @@ resource "aws_config_configuration_recorder" "main" {
 resource "aws_iam_service_linked_role" "aws_config" {
   aws_service_name = "config.amazonaws.com"
 }
+

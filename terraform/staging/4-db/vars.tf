@@ -7,10 +7,11 @@
 
 variable "admins" {
   description = "List of admin userids."
-  type = "list"
+  type        = list(string)
 }
 
 variable "mode" {
   description = "See 'mode' in modules/flu-db/vars.tf"
-  default = "run"
+  default     = "run"
 }
+

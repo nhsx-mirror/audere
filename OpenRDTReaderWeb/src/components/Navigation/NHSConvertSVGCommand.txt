@@ -1,0 +1,1 @@
+npx @svgr/cli NHSlogo.svg > NHSlogo.tsx

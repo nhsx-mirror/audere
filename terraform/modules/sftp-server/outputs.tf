@@ -4,9 +4,10 @@
 // can be found in the LICENSE file distributed with this file.
 
 output "sftp_host" {
-  value = "${aws_route53_record.sftp_hostname.fqdn}"
+  value = aws_route53_record.sftp_hostname.fqdn
 }
 
 output "transfer_server_id" {
-  value = "${aws_transfer_server.sftp_server.id}"
+  value = aws_transfer_server.sftp_server.id
 }
+

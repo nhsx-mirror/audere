@@ -17,7 +17,7 @@ variable "dev_ssh_server_sg_id" {
 
 variable "devs" {
   description = "Userids of developers who should have ssh access to frontend machines"
-  type = "list"
+  type        = list(string)
 }
 
 variable "environment" {
@@ -26,7 +26,7 @@ variable "environment" {
 
 variable "infra_alerts_sns_topic_arn" {
   description = "ARN of SNS topic for publishing alarms"
-  type = "string"
+  type        = string
 }
 
 variable "internet_egress_sg_id" {
@@ -36,3 +36,4 @@ variable "internet_egress_sg_id" {
 variable "reporting_server_sg_id" {
   description = "Security group to open reporting server traffic"
 }
+

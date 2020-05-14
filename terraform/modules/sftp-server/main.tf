@@ -5,30 +5,30 @@
 
 locals {
   base_name = "${var.environment}-sftp"
-  hostname = "sftp.${var.environment}.${var.auderenow_route53_zone_name}"
+  hostname  = "sftp.${var.environment}.${var.auderenow_route53_zone_name}"
 }
 
 resource "aws_route53_record" "sftp_hostname" {
-  zone_id = "${var.auderenow_route53_zone_id}"
-  name = "${local.hostname}"
-  type = "CNAME"
-  ttl = "300"
-  records = ["${aws_transfer_server.sftp_server.endpoint}"]
+  zone_id = var.auderenow_route53_zone_id
+  name    = local.hostname
+  type    = "CNAME"
+  ttl     = "300"
+  records = [aws_transfer_server.sftp_server.endpoint]
 }
 
 data "aws_iam_policy_document" "assume_transfer_service_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["transfer.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "cloudwatch_logging_role" {
-  name = "${local.base_name}-cloudwatch-logging"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_transfer_service_role_policy.json}"
+  name               = "${local.base_name}-cloudwatch-logging"
+  assume_role_policy = data.aws_iam_policy_document.assume_transfer_service_role_policy.json
 }
 
 data "aws_iam_policy_document" "cloudwatch_logging_policy" {
@@ -37,21 +37,21 @@ data "aws_iam_policy_document" "cloudwatch_logging_policy" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:DescribeLogStreams",
-      "logs:PutLogEvents"
+      "logs:PutLogEvents",
     ]
     resources = ["*"]
   }
 }
 
 resource "aws_iam_role_policy" "cloudwatch_logging_role_policy" {
-  name = "${local.base_name}-cloudwatch-logging-policy"
-  role = "${aws_iam_role.cloudwatch_logging_role.id}"
-  policy = "${data.aws_iam_policy_document.cloudwatch_logging_policy.json}"
+  name   = "${local.base_name}-cloudwatch-logging-policy"
+  role   = aws_iam_role.cloudwatch_logging_role.id
+  policy = data.aws_iam_policy_document.cloudwatch_logging_policy.json
 }
 
 resource "aws_transfer_server" "sftp_server" {
   identity_provider_type = "SERVICE_MANAGED"
-  logging_role = "${aws_iam_role.cloudwatch_logging_role.arn}"
+  logging_role           = aws_iam_role.cloudwatch_logging_role.arn
 }
 
 // The provider implementation of aws_transfer_server does not allow setting a
@@ -67,6 +67,11 @@ aws transfer tag-resource \
     'Key=aws:transfer:customHostname,Value=${aws_route53_record.sftp_hostname.name}' \
     'Key=aws:transfer:route53HostedZoneId,Value=/hostedzone/${aws_route53_record.sftp_hostname.zone_id}'
 EOF
+
   }
-  depends_on = ["aws_transfer_server.sftp_server", "aws_route53_record.sftp_hostname"]
+  depends_on = [
+    aws_transfer_server.sftp_server,
+    aws_route53_record.sftp_hostname,
+  ]
 }
+

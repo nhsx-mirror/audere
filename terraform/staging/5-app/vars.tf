@@ -5,30 +5,31 @@
 
 variable "account" {
   description = "Identifier for the AWS account"
-  default = "475613123583"
+  default     = "475613123583"
 }
 
 variable "commit" {
   description = "Git commit tag (or hash) to sync"
-  default = "master"
+  default     = "master"
 }
 
 variable "devs" {
   description = "Userids of developers who have SSH keys to copy to machines"
-  type = "list"
+  type        = list(string)
 }
 
 variable "migrate" {
   description = "Cycle this false -> true -> false to run a db migration"
-  default = "false"
+  default     = "false"
 }
 
 variable "region" {
   description = "Targeted AWS region"
-  default = "us-west-2"
+  default     = "us-west-2"
 }
 
 variable "service" {
   description = "Service mode, one of 'offline', 'single', 'elb'"
-  default = "elb"
+  default     = "elb"
 }
+

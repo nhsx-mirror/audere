@@ -13,13 +13,13 @@ variable "environment" {
 
 variable "policies" {
   description = "Additional policy ARNs to attach to the task execution role"
-  type = "list"
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 variable "policy_count" {
   description = "Number of additional policies to attach to the role"
-  default = "0"
+  default     = "0"
 }
 
 variable "region" {
@@ -33,3 +33,4 @@ variable "task_alias" {
 variable "ssm_parameters_key_arn" {
   description = "ARN of key needed to decrypt SSM parameters"
 }
+

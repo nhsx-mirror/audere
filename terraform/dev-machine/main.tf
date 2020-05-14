@@ -6,12 +6,12 @@
 module "dev_machine" {
   source = "../modules/dev-machine"
 
-  userid = "${var.userid}"
-  ssh_public_key = "${file("${var.key_path}")}"
-  ami_id = "${module.ami.ubuntu}"
-  home_size_gb = "${var.home_size_gb}"
-  availability_zone = "${var.availability_zone}"
-  instance_type = "${var.instance_type}"
+  userid            = var.userid
+  ssh_public_key    = file(var.key_path)
+  ami_id            = module.ami.ubuntu
+  home_size_gb      = var.home_size_gb
+  availability_zone = var.availability_zone
+  instance_type     = var.instance_type
 }
 
 module "ami" {
@@ -19,5 +19,6 @@ module "ami" {
 }
 
 provider "aws" {
-  region = "us-west-2"
+  version = "~> 2.61"
+  region  = "us-west-2"
 }

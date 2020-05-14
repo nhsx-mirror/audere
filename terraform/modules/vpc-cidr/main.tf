@@ -34,15 +34,16 @@
 // AWS seems to allocate its default VPCs from the end of 172.16-31.*.* range.
 
 locals {
-  vpc_prod_cidr = "192.168.0.0/16"
-  prod_db_cidr = "${cidrsubnet(local.vpc_prod_cidr, 8, 0)}"
-  prod_dev_cidr = "${cidrsubnet(local.vpc_prod_cidr, 8, 1)}"
-  prod_app_cidr = "${cidrsubnet(local.vpc_prod_cidr, 8, 254)}"
-  prod_public_cidr = "${cidrsubnet(local.vpc_prod_cidr, 8, 255)}"
+  vpc_prod_cidr    = "192.168.0.0/16"
+  prod_db_cidr     = cidrsubnet(local.vpc_prod_cidr, 8, 0)
+  prod_dev_cidr    = cidrsubnet(local.vpc_prod_cidr, 8, 1)
+  prod_app_cidr    = cidrsubnet(local.vpc_prod_cidr, 8, 254)
+  prod_public_cidr = cidrsubnet(local.vpc_prod_cidr, 8, 255)
 
-  vpc_staging_cidr = "10.0.0.0/16"
-  staging_db_cidr = "${cidrsubnet(local.vpc_staging_cidr, 8, 0)}"
-  staging_dev_cidr = "${cidrsubnet(local.vpc_staging_cidr, 8, 1)}"
-  staging_app_cidr = "${cidrsubnet(local.vpc_staging_cidr, 8, 254)}"
-  staging_public_cidr = "${cidrsubnet(local.vpc_staging_cidr, 8, 255)}"
+  vpc_staging_cidr    = "10.0.0.0/16"
+  staging_db_cidr     = cidrsubnet(local.vpc_staging_cidr, 8, 0)
+  staging_dev_cidr    = cidrsubnet(local.vpc_staging_cidr, 8, 1)
+  staging_app_cidr    = cidrsubnet(local.vpc_staging_cidr, 8, 254)
+  staging_public_cidr = cidrsubnet(local.vpc_staging_cidr, 8, 255)
 }
+

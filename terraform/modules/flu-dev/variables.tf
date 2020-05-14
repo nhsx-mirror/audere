@@ -9,17 +9,17 @@ variable "availability_zone" {
 
 variable "bastion_ingress_sg_id" {
   description = "Security group to open bastion server ingress"
-  type = "string"
+  type        = string
 }
 
 variable "bastion_port" {
   description = "Port to open on the bastion host."
-  default = 12893
+  default     = 12893
 }
 
 variable "bastion_subnet_id" {
   description = "Subnet in which the bastion server should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "db_client_sg_id" {
@@ -28,17 +28,17 @@ variable "db_client_sg_id" {
 
 variable "dev_machine_client_sg_id" {
   description = "Security group to allow a resource to talk to dev machines"
-  type = "string"
+  type        = string
 }
 
 variable "dev_machine_server_sg_id" {
   description = "Security group to restrict access to dev machines"
-  type = "string"
+  type        = string
 }
 
 variable "dev_machine_subnet_id" {
   description = "Subnet in which dev machines should be deployed"
-  type = "string"
+  type        = string
 }
 
 variable "dev_ssh_client_sg_id" {
@@ -47,7 +47,7 @@ variable "dev_ssh_client_sg_id" {
 
 variable "devs" {
   description = "Userids for developers who should have a dev machine in this environment"
-  type = "list"
+  type        = list(string)
 }
 
 variable "fluapi_internal_client_sg_id" {
@@ -68,10 +68,11 @@ variable "instance_type" {
 
 variable "internet_egress_sg_id" {
   description = "Security group to open internet egress"
-  type = "string"
+  type        = string
 }
 
 variable "proxies" {
   description = "Userids for proxy accounts who need bastion access but not a dev machine"
-  default = []
+  default     = []
 }
+

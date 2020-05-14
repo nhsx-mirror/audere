@@ -5,5 +5,6 @@
 
 variable "bastion_cidr_whitelist" {
   description = "CIDR blocks for source IPs allowed to connect to bastion server"
-  type = "list"
+  type        = list(string)
 }
+
